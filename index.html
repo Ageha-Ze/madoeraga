@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MADOERAGA — Madu Yang Diperkuat Dengan 4 Pilar</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9960C;
+    --gold-light: #F0C040;
+    --gold-bright: #FFD700;
+    --gold-dim: #8B6914;
+    --black: #0A0805;
+    --black-soft: #130F08;
+    --black-card: #1A1408;
+    --cream: #F5ECD0;
+    --cream-dim: #C8B888;
+    --red: #8B1A1A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: 'Crimson Text', Georgia, serif;
+    overflow-x: hidden;
+  }
+
+  /* ===== NOISE TEXTURE OVERLAY ===== */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ===== NAVBAR ===== */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(10,8,5,0.95), transparent);
+    backdrop-filter: blur(2px);
+  }
+
+  nav img {
+    height: 52px;
+    filter: drop-shadow(0 0 8px rgba(201,150,12,0.5));
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--cream-dim);
+    text-decoration: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--gold-bright); }
+
+  /* ===== HERO ===== */
+  #hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 20px 80px;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,150,12,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 20% 80%, rgba(139,26,26,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(201,150,12,0.08) 0%, transparent 60%),
+      var(--black);
+  }
+
+  .hero-particles {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--gold-bright);
+    border-radius: 50%;
+    animation: float linear infinite;
+    opacity: 0;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 0.6; }
+    100% { transform: translateY(-10vh) translateX(var(--drift)); opacity: 0; }
+  }
+
+  .hero-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 1s ease 0.2s both;
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: '✦';
+    margin: 0 12px;
+    opacity: 0.6;
+  }
+
+  .hero-logo {
+    width: min(380px, 80vw);
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 1s ease 0.4s both;
+    filter: drop-shadow(0 0 30px rgba(201,150,12,0.4)) drop-shadow(0 0 60px rgba(201,150,12,0.2));
+  }
+
+  .hero-tagline {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-top: 8px;
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 1s ease 0.6s both;
+  }
+
+  .hero-desc {
+    max-width: 560px;
+    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+    line-height: 1.8;
+    color: var(--cream-dim);
+    margin-top: 28px;
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 1s ease 0.8s both;
+  }
+
+  .hero-product {
+    width: min(280px, 55vw);
+    position: relative;
+    z-index: 2;
+    margin-top: 40px;
+    animation: fadeUp 1s ease 1s both, levitate 4s ease-in-out 2s infinite;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(201,150,12,0.3));
+  }
+
+  @keyframes levitate {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    margin-top: 40px;
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 1s ease 1.2s both;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold-dim), var(--gold), var(--gold-light));
+    color: var(--black);
+    border: none;
+    padding: 16px 40px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  }
+
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.5s;
+  }
+
+  .btn-primary:hover::after { transform: translateX(100%); }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(201,150,12,0.5);
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    animation: bounce 2s ease infinite;
+    color: var(--gold-dim);
+    font-size: 1.5rem;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.5; }
+    50% { transform: translateX(-50%) translateY(8px); opacity: 1; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== DIVIDER ===== */
+  .gold-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-dim), var(--gold), var(--gold-dim), transparent);
+    position: relative;
+  }
+
+  .gold-divider::after {
+    content: '✦';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--black-soft);
+    padding: 0 16px;
+    color: var(--gold);
+    font-size: 0.8rem;
+  }
+
+  /* ===== SECTIONS COMMON ===== */
+  section {
+    padding: 100px 20px;
+    position: relative;
+  }
+
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 16px;
+    opacity: 0.8;
+  }
+
+  .section-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    text-align: center;
+    color: var(--cream);
+    line-height: 1.2;
+    margin-bottom: 20px;
+  }
+
+  .section-title span { color: var(--gold-light); }
+
+  .section-subtitle {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 60px;
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--cream-dim);
+  }
+
+  /* ===== MASALAH SECTION ===== */
+  #masalah {
+    background: linear-gradient(180deg, var(--black) 0%, var(--black-soft) 100%);
+  }
+
+  .masalah-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .masalah-card {
+    background: linear-gradient(135deg, rgba(139,26,26,0.15), rgba(26,20,8,0.8));
+    border: 1px solid rgba(139,26,26,0.3);
+    padding: 36px 28px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+
+  .masalah-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--red), transparent);
+  }
+
+  .masalah-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(139,26,26,0.6);
+  }
+
+  .masalah-icon {
+    font-size: 2rem;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .masalah-card h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--gold-light);
+    margin-bottom: 10px;
+  }
+
+  .masalah-card p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--cream-dim);
+  }
+
+  /* ===== SOLUSI SECTION ===== */
+  #solusi {
+    background: var(--black-soft);
+  }
+
+  .solusi-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .solusi-image-wrap {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  .solusi-image-wrap img {
+    width: 100%;
+    max-width: 420px;
+    filter: drop-shadow(0 20px 60px rgba(0,0,0,0.8)) drop-shadow(0 0 30px rgba(201,150,12,0.25));
+  }
+
+  .solusi-image-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(ellipse at center, rgba(201,150,12,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .solusi-text h2 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    color: var(--cream);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .solusi-text h2 span { color: var(--gold-light); }
+
+  .solusi-text .subtitle {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .solusi-text p {
+    font-size: 1.1rem;
+    line-height: 1.9;
+    color: var(--cream-dim);
+    margin-bottom: 16px;
+  }
+
+  .pilar-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .pilar-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+    background: rgba(201,150,12,0.06);
+    border: 1px solid rgba(201,150,12,0.2);
+  }
+
+  .pilar-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .pilar-item strong {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--gold-light);
+    margin-bottom: 3px;
+    text-transform: uppercase;
+  }
+
+  .pilar-item span {
+    font-size: 0.9rem;
+    color: var(--cream-dim);
+  }
+
+  /* ===== BAHAN SECTION ===== */
+  #bahan {
+    background: var(--black);
+    overflow: hidden;
+  }
+
+  .bahan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .bahan-card {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    cursor: pointer;
+  }
+
+  .bahan-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+    filter: brightness(0.5) saturate(0.8);
+  }
+
+  .bahan-card:hover img {
+    transform: scale(1.08);
+    filter: brightness(0.4) saturate(1.2);
+  }
+
+  .bahan-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,8,5,0.95) 0%, rgba(10,8,5,0.4) 50%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 28px;
+    transition: background 0.3s;
+  }
+
+  .bahan-card:hover .bahan-overlay {
+    background: linear-gradient(to top, rgba(10,8,5,0.98) 0%, rgba(10,8,5,0.6) 60%, rgba(201,150,12,0.1) 100%);
+  }
+
+  .bahan-number {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 2.5rem;
+    color: rgba(201,150,12,0.15);
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    line-height: 1;
+    transition: color 0.3s;
+  }
+
+  .bahan-card:hover .bahan-number {
+    color: rgba(201,150,12,0.35);
+  }
+
+  .bahan-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .bahan-latin {
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--gold-dim);
+    margin-bottom: 10px;
+  }
+
+  .bahan-desc {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--cream-dim);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.3s;
+    opacity: 0;
+  }
+
+  .bahan-card:hover .bahan-desc {
+    max-height: 120px;
+    opacity: 1;
+  }
+
+  .bahan-tag {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 4px 12px;
+    border: 1px solid rgba(201,150,12,0.4);
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease 0.1s, opacity 0.3s 0.1s;
+    opacity: 0;
+  }
+
+  .bahan-card:hover .bahan-tag {
+    max-height: 40px;
+    opacity: 1;
+  }
+
+  /* ===== TESTIMONI / CARA PAKAI ===== */
+  #cara-pakai {
+    background: linear-gradient(180deg, var(--black-soft) 0%, var(--black-card) 100%);
+    text-align: center;
+  }
+
+  .steps {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    max-width: 900px;
+    margin: 0 auto 60px;
+    flex-wrap: wrap;
+  }
+
+  .step {
+    flex: 1;
+    min-width: 180px;
+    padding: 32px 20px;
+    position: relative;
+  }
+
+  .step:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold-dim);
+    font-size: 1.2rem;
+  }
+
+  .step-num {
+    width: 56px;
+    height: 56px;
+    border: 1px solid var(--gold-dim);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.2rem;
+    color: var(--gold);
+    background: rgba(201,150,12,0.08);
+  }
+
+  .step h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: var(--cream);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .step p {
+    font-size: 0.95rem;
+    color: var(--cream-dim);
+    line-height: 1.6;
+  }
+
+  /* ===== PRODUK / ORDER SECTION ===== */
+  #order {
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+  }
+
+  #order::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 100%, rgba(201,150,12,0.1) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 30% at 20% 50%, rgba(139,26,26,0.08) 0%, transparent 60%);
+  }
+
+  .order-wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  .order-card {
+    background: linear-gradient(135deg, var(--black-card), #1f1608);
+    border: 1px solid rgba(201,150,12,0.3);
+    padding: 60px 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .order-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(201,150,12,0.03) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .order-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+
+  .order-image img {
+    width: 100%;
+    max-width: 340px;
+    display: block;
+    margin: 0 auto;
+    filter: drop-shadow(0 20px 50px rgba(0,0,0,0.9)) drop-shadow(0 0 20px rgba(201,150,12,0.2));
+    animation: levitate 5s ease-in-out infinite;
+  }
+
+  .order-info h2 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    color: var(--gold-bright);
+    line-height: 1.1;
+    margin-bottom: 6px;
+    text-shadow: 0 0 30px rgba(255,215,0,0.3);
+  }
+
+  .order-info .tagline {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .order-info p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--cream-dim);
+    margin-bottom: 24px;
+  }
+
+  .price-box {
+    background: rgba(201,150,12,0.08);
+    border: 1px solid rgba(201,150,12,0.25);
+    padding: 20px 28px;
+    margin-bottom: 28px;
+    position: relative;
+  }
+
+  .price-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .price-amount {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 2.4rem;
+    color: var(--gold-bright);
+    line-height: 1;
+    text-shadow: 0 0 20px rgba(255,215,0,0.4);
+  }
+
+  .price-unit {
+    font-size: 1rem;
+    color: var(--cream-dim);
+    margin-top: 4px;
+  }
+
+  .badges {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+
+  .badge {
+    padding: 6px 14px;
+    border: 1px solid rgba(201,150,12,0.3);
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-transform: uppercase;
+    background: rgba(201,150,12,0.05);
+  }
+
+  .btn-wa {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #1a5c2e, #25a244, #1a5c2e);
+    color: white;
+    padding: 18px 36px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+    width: 100%;
+    justify-content: center;
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+  }
+
+  .btn-wa:hover {
+    background: linear-gradient(135deg, #1f7a3a, #2ecc71, #1f7a3a);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 40px rgba(37,162,68,0.5);
+  }
+
+  .btn-wa svg {
+    width: 22px;
+    height: 22px;
+    fill: white;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--black-card);
+    border-top: 1px solid rgba(201,150,12,0.15);
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  footer img {
+    height: 48px;
+    margin-bottom: 16px;
+    opacity: 0.7;
+    filter: drop-shadow(0 0 6px rgba(201,150,12,0.3));
+  }
+
+  footer p {
+    font-size: 0.9rem;
+    color: var(--gold-dim);
+    margin-bottom: 6px;
+  }
+
+  footer small {
+    font-size: 0.75rem;
+    color: rgba(200,184,136,0.4);
+  }
+
+  /* ===== SCROLL ANIMATIONS ===== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+
+    .solusi-wrap {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .solusi-image-wrap { order: -1; }
+
+    .pilar-grid { grid-template-columns: 1fr; }
+
+    .order-card {
+      grid-template-columns: 1fr;
+      padding: 40px 24px;
+      gap: 36px;
+    }
+
+    .bahan-grid {
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+
+    .steps { gap: 0; }
+    .step:not(:last-child)::after { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <img src="logomadoeraga.png" alt="Madoeraga Logo">
+  <ul class="nav-links">
+    <li><a href="#masalah">Masalah</a></li>
+    <li><a href="#solusi">Solusi</a></li>
+    <li><a href="#bahan">Bahan</a></li>
+    <li><a href="#order">Pesan</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-particles" id="particles"></div>
+
+  <p class="hero-eyebrow">Produk Herbal Premium Indonesia</p>
+  <img src="logomadoeraga.png" alt="MADOERAGA" class="hero-logo">
+  <p class="hero-tagline">Madu Yang Diperkuat Dengan 4 Pilar</p>
+  <p class="hero-desc">Solusi alami untuk pria yang ingin kembali berenergi, bersemangat, dan tampil prima setiap hari — dari racikan herbal terpercaya nusantara.</p>
+  <img src="Madoeraga9.png" alt="Produk Madoeraga" class="hero-product">
+  <div class="hero-cta">
+    <a href="#order" class="btn-primary">Pesan Sekarang</a>
+  </div>
+
+  <div class="scroll-indicator">↓</div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- MASALAH -->
+<section id="masalah">
+  <p class="section-label reveal">Kenali Masalahnya</p>
+  <h2 class="section-title reveal">Apakah Kamu <span>Merasakannya?</span></h2>
+  <p class="section-subtitle reveal">Banyak pria dewasa mengalami penurunan kualitas hidup tanpa menyadari penyebabnya. Ini bukan hal yang harus diterima begitu saja.</p>
+
+  <div class="masalah-grid">
+    <div class="masalah-card reveal">
+      <span class="masalah-icon">⚡</span>
+      <h3>Mudah Lelah & Lesu</h3>
+      <p>Tubuh cepat kehabisan energi bahkan untuk aktivitas sehari-hari. Produktivitas menurun, semangat hilang, dan stamina tak lagi seperti dulu.</p>
+    </div>
+    <div class="masalah-card reveal">
+      <span class="masalah-icon">🔥</span>
+      <h3>Vitalitas Menurun</h3>
+      <p>Penurunan hormon dan sirkulasi darah yang buruk membuat pria kehilangan kepercayaan diri dan kualitas hubungan yang bermakna.</p>
+    </div>
+    <div class="masalah-card reveal">
+      <span class="masalah-icon">😴</span>
+      <h3>Tidur Tak Berkualitas</h3>
+      <p>Tubuh sulit beristirahat dengan baik, memperparah kelelahan fisik dan mental yang menumpuk dari hari ke hari.</p>
+    </div>
+    <div class="masalah-card reveal">
+      <span class="masalah-icon">🧠</span>
+      <h3>Stres & Pikiran Berat</h3>
+      <p>Tekanan pekerjaan dan kehidupan menyebabkan stres kronis yang menggerus keseimbangan tubuh dan pikiran secara perlahan.</p>
+    </div>
+  </div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- SOLUSI -->
+<section id="solusi">
+  <div class="solusi-wrap">
+    <div class="solusi-image-wrap reveal">
+      <img src="Madoeraga1.png" alt="Madoeraga Produk">
+    </div>
+    <div class="solusi-text">
+      <p class="subtitle reveal">Solusi Herbal Terpercaya</p>
+      <h2 class="reveal">Hadir <span>MADOERAGA</span><br>untuk Pria Indonesia</h2>
+      <p class="reveal">Madoeraga adalah madu herbal premium yang diformulasikan khusus untuk mendukung kesehatan dan vitalitas pria. Dibuat dari perpaduan 8 bahan herbal pilihan berkualitas tinggi yang telah terbukti secara turun-temurun.</p>
+      <p class="reveal">Dengan sertifikasi P-IRT dan label Halal Indonesia, Madoeraga aman dikonsumsi dan diproduksi dengan standar kualitas yang ketat.</p>
+
+      <div class="pilar-grid">
+        <div class="pilar-item reveal">
+          <span class="pilar-icon">⚡</span>
+          <div>
+            <strong>Energi</strong>
+            <span>Madu & Jahe Merah untuk dorongan stamina harian</span>
+          </div>
+        </div>
+        <div class="pilar-item reveal">
+          <span class="pilar-icon">♂️</span>
+          <div>
+            <strong>Vitalitas</strong>
+            <span>Pasak Bumi & Tribulus untuk kejantanan pria</span>
+          </div>
+        </div>
+        <div class="pilar-item reveal">
+          <span class="pilar-icon">🪷</span>
+          <div>
+            <strong>Keseimbangan</strong>
+            <span>Ashwagandha untuk stabilitas hormon & mental</span>
+          </div>
+        </div>
+        <div class="pilar-item reveal">
+          <span class="pilar-icon">🔥</span>
+          <div>
+            <strong>Sirkulasi Panas</strong>
+            <span>Cabe Jawa & Lada Hitam untuk aliran darah optimal</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- BAHAN -->
+<section id="bahan" style="padding-bottom: 0;">
+  <p class="section-label reveal">Racikan Terpilih</p>
+  <h2 class="section-title reveal">8 Bahan <span>Herbal Pilihan</span></h2>
+  <p class="section-subtitle reveal">Setiap bahan dipilih dengan cermat berdasarkan khasiat tradisional yang telah teruji. Hover pada setiap bahan untuk mengetahui manfaatnya.</p>
+</section>
+
+<div class="bahan-grid">
+  <div class="bahan-card">
+    <img src="jahemerah.jpg" alt="Jahe Merah">
+    <div class="bahan-overlay">
+      <span class="bahan-number">01</span>
+      <div class="bahan-name">Jahe Merah</div>
+      <div class="bahan-latin">Zingiber officinale var. rubrum</div>
+      <div class="bahan-desc">Meningkatkan stamina, menghangatkan tubuh, dan melancarkan sirkulasi darah. Kandungan gingerol-nya lebih tinggi dibanding jahe biasa.</div>
+      <span class="bahan-tag">Energi & Stamina</span>
+    </div>
+  </div>
+  <div class="bahan-card">
+    <img src="Pasakbumi.jpg" alt="Pasak Bumi">
+    <div class="bahan-overlay">
+      <span class="bahan-number">02</span>
+      <div class="bahan-name">Pasak Bumi</div>
+      <div class="bahan-latin">Eurycoma longifolia</div>
+      <div class="bahan-desc">Dikenal sebagai "Asian Viagra" alami. Meningkatkan kadar testosteron secara alami dan mendukung vitalitas pria.</div>
+      <span class="bahan-tag">Vitalitas Pria</span>
+    </div>
+  </div>
+  <div class="bahan-card">
+    <img src="ashwaganda.jpg" alt="Ashwagandha">
+    <div class="bahan-overlay">
+      <span class="bahan-number">03</span>
+      <div class="bahan-name">Ashwagandha</div>
+      <div class="bahan-latin">Withania somnifera</div>
+      <div class="bahan-desc">Adaptogen kuat yang membantu tubuh mengatasi stres, meningkatkan kualitas tidur, dan menjaga keseimbangan hormon.</div>
+      <span class="bahan-tag">Keseimbangan & Relaksasi</span>
+    </div>
+  </div>
+  <div class="bahan-card">
+    <img src="tribulus.jpg" alt="Tribulus">
+    <div class="bahan-overlay">
+      <span class="bahan-number">04</span>
+      <div class="bahan-name">Tribulus</div>
+      <div class="bahan-latin">Tribulus terrestris</div>
+      <div class="bahan-desc">Membantu meningkatkan libido dan produksi testosteron alami. Digunakan luas oleh atlet untuk performa dan kekuatan fisik.</div>
+      <span class="bahan-tag">Vitalitas & Performa</span>
+    </div>
+  </div>
+  <div class="bahan-card">
+    <img src="Jintanhitam.jpg" alt="Jintan Hitam">
+    <div class="bahan-overlay">
+      <span class="bahan-number">05</span>
+      <div class="bahan-name">Jintan Hitam</div>
+      <div class="bahan-latin">Nigella sativa</div>
+      <div class="bahan-desc">Habbatussauda — dikenal sebagai obat segala penyakit kecuali kematian. Kaya antioksidan dan mendukung imunitas tubuh.</div>
+      <span class="bahan-tag">Imunitas & Antioksidan</span>
+    </div>
+  </div>
+  <div class="bahan-card">
+    <img src="cabejawa.jpg" alt="Cabe Jawa">
+    <div class="bahan-overlay">
+      <span class="bahan-number">06</span>
+      <div class="bahan-name">Cabe Jawa</div>
+      <div class="bahan-latin">Piper retrofractum</div>
+      <div class="bahan-desc">Merangsang peredaran darah, menghangatkan tubuh, dan meningkatkan efektivitas penyerapan nutrisi dari bahan-bahan lainnya.</div>
+      <span class="bahan-tag">Sirkulasi Darah</span>
+    </div>
+  </div>
+  <div class="bahan-card">
+    <img src="ladahitam.jpg" alt="Lada Hitam">
+    <div class="bahan-overlay">
+      <span class="bahan-number">07</span>
+      <div class="bahan-name">Lada Hitam</div>
+      <div class="bahan-latin">Piper nigrum</div>
+      <div class="bahan-desc">Kandungan piperin meningkatkan bioavailabilitas nutrisi hingga 2000%. Membantu tubuh menyerap manfaat semua bahan secara optimal.</div>
+      <span class="bahan-tag">Penyerapan Nutrisi</span>
+    </div>
+  </div>
+  <div class="bahan-card">
+    <img src="Purwoceng.jpg" alt="Purwoceng">
+    <div class="bahan-overlay">
+      <span class="bahan-number">08</span>
+      <div class="bahan-name">Purwoceng</div>
+      <div class="bahan-latin">Pimpinella alpina</div>
+      <div class="bahan-desc">Tanaman endemik dataran tinggi Dieng. Dikenal sebagai afrodisiak alami Indonesia yang meningkatkan gairah dan stamina pria.</div>
+      <span class="bahan-tag">Vitalitas Lokal</span>
+    </div>
+  </div>
+</div>
+
+<div style="height: 100px; background: var(--black);"></div>
+
+<div class="gold-divider"></div>
+
+<!-- CARA PAKAI -->
+<section id="cara-pakai">
+  <p class="section-label reveal">Mudah & Praktis</p>
+  <h2 class="section-title reveal">Cara <span>Mengonsumsi</span></h2>
+  <p class="section-subtitle reveal">Cukup 3 langkah sederhana untuk merasakan manfaatnya setiap hari.</p>
+
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-num">1</div>
+      <h3>Ambil Satu Sendok</h3>
+      <p>Ambil 1–2 sendok teh Madoeraga setiap hari.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">2</div>
+      <h3>Konsumsi Langsung</h3>
+      <p>Bisa diminum langsung atau dicampur air hangat.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">3</div>
+      <h3>Rasakan Manfaatnya</h3>
+      <p>Konsumsi rutin untuk hasil optimal dalam 2–4 minggu.</p>
+    </div>
+  </div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- ORDER -->
+<section id="order">
+  <div class="order-wrap">
+    <p class="section-label reveal" style="margin-bottom:40px;">Dapatkan Sekarang</p>
+    <div class="order-card reveal">
+      <div class="order-image">
+        <img src="Madoeraga6.png" alt="Madoeraga">
+      </div>
+      <div class="order-info">
+        <h2>MADOERAGA</h2>
+        <p class="tagline">Madu Yang Diperkuat Dengan 4 Pilar</p>
+
+        <p>Dapatkan Madoeraga dengan harga terjangkau dan rasakan perubahan nyata pada energi dan vitalitas Anda mulai dari minggu pertama.</p>
+
+        <div class="badges">
+          <span class="badge">✓ Halal Indonesia</span>
+          <span class="badge">✓ P-IRT Terdaftar</span>
+          <span class="badge">✓ 8 Herbal Alami</span>
+          <span class="badge">✓ 180gr Netto</span>
+        </div>
+
+        <div class="price-box">
+          <div class="price-label">Harga Spesial</div>
+          <div class="price-amount">Rp 50.000</div>
+          <div class="price-unit">per botol · 180 gram</div>
+        </div>
+
+        <a href="https://wa.me/6208993071991?text=Halo%2C%20saya%20ingin%20memesan%20Madoeraga.%20Mohon%20informasinya." class="btn-wa" target="_blank">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          Pesan via WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <img src="logomadoeraga.png" alt="Madoeraga">
+  <p>MADOERAGA — Madu Yang Diperkuat Dengan 4 Pilar</p>
+  <p>P-IRT 2073402011968-29 · Halal Indonesia</p>
+  <br>
+  <small>© 2025 Madoeraga. Semua hak dilindungi.</small>
+</footer>
+
+<script>
+  // Floating particles
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.classList.add('particle');
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.animationDuration = (8 + Math.random() * 12) + 's';
+    p.style.animationDelay = (Math.random() * 15) + 's';
+    p.style.setProperty('--drift', (Math.random() * 100 - 50) + 'px');
+    p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
+    container.appendChild(p);
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
