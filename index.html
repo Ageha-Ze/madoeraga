@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MADOERAGA — Madu Yang Diperkuat Dengan 4 Pilar</title>
+<link rel="icon" type="image/png" href="logomadoeraga.png">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -26,12 +27,12 @@
   body { background:var(--iron); color:var(--ash); font-family:'Barlow', Georgia, sans-serif; overflow-x:hidden; }
 
   body::after {
-    content:''; position:fixed; inset:0; pointer-events:none; z-index:9000; opacity:.032;
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:9000; opacity:.045;
     background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
     background-size:256px;
   }
 
-  /* SPLASH */
+  /* ─── SPLASH ─── */
   #splash {
     position:fixed; inset:0; z-index:99999; background:var(--iron);
     display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px;
@@ -61,41 +62,91 @@
   }
   @keyframes blink { 0%,100%{opacity:.3} 50%{opacity:1} }
 
-  /* NAVBAR */
+  /* ─── NAVBAR ─── */
   nav {
     position:fixed; top:0; width:100%; z-index:500;
     padding:12px 48px;
     display:flex; align-items:center; justify-content:space-between;
-    background:linear-gradient(to bottom, rgba(12,10,7,.96) 60%, transparent);
-    border-bottom:1px solid rgba(201,150,12,.08);
+    background:linear-gradient(to bottom, rgba(12,10,7,.97) 60%, transparent);
+    border-bottom:1px solid rgba(201,150,12,.12);
   }
-  .nav-logo { height:44px; filter:drop-shadow(0 0 8px rgba(201,150,12,.4)); }
+  .nav-logo { height:70px; filter:drop-shadow(0 0 8px rgba(201,150,12,.4)); }
   .nav-links { display:flex; gap:28px; list-style:none; }
   .nav-links a {
     color:var(--ash-mute); text-decoration:none;
     font-family:'Barlow Condensed', sans-serif;
-    font-size:.8rem; letter-spacing:.2em; text-transform:uppercase;
-    transition:color .25s;
+    font-size:.95rem; letter-spacing:.22em; text-transform:uppercase;
+    transition:color .2s, letter-spacing .2s;
+    position:relative;
   }
-  .nav-links a:hover { color:var(--forge-bright); }
+  .nav-links a::after {
+    content:''; position:absolute; bottom:-4px; left:0; right:0; height:1px;
+    background:var(--ember); transform:scaleX(0); transition:transform .25s;
+  }
+  .nav-links a:hover { color:var(--forge-bright); letter-spacing:.28em; }
+  .nav-links a:hover::after { transform:scaleX(1); }
 
-  /* HERO */
+  /* ─── HERO ─── */
+  /*
+   * TRUE PARALLAX:
+   * .hero-banner is position:fixed as a direct child of <body> (outside #hero).
+   * It stays pinned to the viewport. All subsequent sections have z-index:2
+   * and solid backgrounds so they slide over the banner as user scrolls.
+   * JS fades the banner out once hero scrolls fully off-screen.
+   */
   #hero {
-    position:relative; min-height:100vh;
+    position:relative; min-height:100svh;
     display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
-    overflow:hidden; padding-bottom:80px;
+    overflow:hidden;          /* clips the oversized parallax banner */
+    padding-bottom:80px;
   }
+
+  /* Banner wrapper — oversized for parallax headroom */
   .hero-banner {
-    position:absolute; inset:0;
-    background:url('madoeragabanner.png') center center / cover no-repeat;
+    position:absolute;
+    top:-15%; left:0; width:100%; height:130%;
+    z-index:0;
+    pointer-events:none;
+    will-change:transform;
+    overflow:hidden;
   }
+
+  /* The actual image — object-fit gives us full control of crop/position */
+  .hero-banner img {
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position:center top;   /* desktop: center horizontally, anchor top */
+    display:block;
+  }
+
+  /* Gradient overlay (was on ::after, now on ::before so img sits below it) */
+  .hero-banner::after {
+    content:''; position:absolute; inset:0; z-index:1;
+    background:
+      linear-gradient(to top,  rgba(12,10,7,1) 0%, rgba(12,10,7,.7) 28%, rgba(12,10,7,.25) 60%, transparent 80%),
+      linear-gradient(to right, rgba(12,10,7,.5) 0%, transparent 45%),
+      linear-gradient(to left,  rgba(12,10,7,.5) 0%, transparent 45%),
+      linear-gradient(to bottom, rgba(12,10,7,.55) 0%, transparent 20%);
+  }
+
+  /* Mobile: MG2.png adalah portrait — bottle sudah terpusat, object-position center */
+  @media (max-width:768px) {
+    .hero-banner img {
+      object-position:center 15%;   /* sedikit ke atas agar botol + spotlight kelihatan */
+    }
+  }
+
   .hero-banner::after {
     content:''; position:absolute; inset:0;
     background:
-      linear-gradient(to top, rgba(12,10,7,1) 0%, rgba(12,10,7,.6) 30%, transparent 60%),
-      linear-gradient(to right, rgba(12,10,7,.35) 0%, transparent 40%),
-      linear-gradient(to left,  rgba(12,10,7,.35) 0%, transparent 40%);
+      linear-gradient(to top,  rgba(12,10,7,1) 0%, rgba(12,10,7,.7) 28%, rgba(12,10,7,.25) 60%, transparent 80%),
+      linear-gradient(to right, rgba(12,10,7,.5) 0%, transparent 45%),
+      linear-gradient(to left,  rgba(12,10,7,.5) 0%, transparent 45%),
+      linear-gradient(to bottom, rgba(12,10,7,.55) 0%, transparent 20%);
   }
+
+  /* Post-hero sections stack normally, no z-index fight needed */
+
   #flames { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:3; }
   .flame { position:absolute; bottom:0; border-radius:50%; animation:riseFlame linear infinite; opacity:0; }
   @keyframes riseFlame {
@@ -105,9 +156,12 @@
     90% { opacity:0; }
     100%{ transform:translateY(-85vh) translateX(var(--fx2)) scale(.2); opacity:0; }
   }
+
   .hero-inner {
-    position:relative; z-index:5; text-align:center; padding:0 24px;
+    position:relative; z-index:5; text-align:center;
+    padding:0 20px 0;
     display:flex; flex-direction:column; align-items:center; gap:14px;
+    width:100%;
   }
   .hero-kicker {
     font-family:'Barlow Condensed', sans-serif;
@@ -115,13 +169,13 @@
     color:var(--ember-hot); animation:fadeUp .9s ease .2s both;
   }
   .hero-logo-img {
-    width:min(340px, 72vw);
-    filter:drop-shadow(0 0 30px rgba(201,150,12,.5)) drop-shadow(0 4px 30px rgba(0,0,0,.9));
+    width:min(500px, 80vw);
+    filter:drop-shadow(0 0 30px rgba(201,150,12,.55)) drop-shadow(4px 8px 40px rgba(0,0,0,.95));
     animation:fadeUp .9s ease .4s both;
   }
   .hero-sub {
     font-family:'Barlow Condensed', sans-serif;
-    font-size:clamp(1rem,2.4vw,1.25rem); letter-spacing:.3em; text-transform:uppercase;
+    font-size:clamp(.95rem,2.4vw,1.25rem); letter-spacing:.3em; text-transform:uppercase;
     color:var(--ash-dim); animation:fadeUp .9s ease .6s both;
   }
   .hero-rule {
@@ -130,8 +184,9 @@
     animation:fadeUp .9s ease .7s both;
   }
   .hero-desc {
-    max-width:500px; font-size:clamp(.95rem,2.1vw,1.1rem);
+    max-width:480px; font-size:clamp(.9rem,2.1vw,1.05rem);
     line-height:1.8; color:var(--ash-dim); animation:fadeUp .9s ease .8s both;
+    padding:0 8px;
   }
   .hero-cta { animation:fadeUp .9s ease 1s both; }
   .scroll-hint {
@@ -152,11 +207,11 @@
     50%    { transform:translateY(-13px); }
   }
 
-  /* BUTTONS */
+  /* ─── BUTTONS ─── */
   .btn-forge {
     display:inline-block; background:var(--ember); color:#fff;
     padding:15px 44px; font-family:'Barlow Condensed', sans-serif;
-    font-size:.9rem; font-weight:700; letter-spacing:.25em; text-transform:uppercase;
+    font-size:.9rem; font-weight:700; letter-spacing:.3em; text-transform:uppercase;
     text-decoration:none; border:none; cursor:pointer;
     clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);
     transition:background .3s, transform .3s, box-shadow .3s;
@@ -164,13 +219,13 @@
   }
   .btn-forge::after {
     content:''; position:absolute; inset:0;
-    background:linear-gradient(135deg,transparent 30%,rgba(255,255,255,.25) 50%,transparent 70%);
+    background:linear-gradient(135deg,transparent 30%,rgba(255,255,255,.28) 50%,transparent 70%);
     transform:translateX(-120%); transition:transform .45s;
   }
   .btn-forge:hover::after { transform:translateX(120%); }
-  .btn-forge:hover { background:var(--ember-hot); transform:translateY(-2px); box-shadow:0 8px 28px rgba(232,82,10,.5); }
+  .btn-forge:hover { background:var(--ember-hot); transform:translateY(-3px); box-shadow:0 10px 36px rgba(232,82,10,.6); }
 
-  /* DIVIDER */
+  /* ─── DIVIDER ─── */
   .divider {
     width:100%; height:1px;
     background:linear-gradient(90deg,transparent,var(--ash-mute),var(--forge),var(--ash-mute),transparent);
@@ -182,87 +237,101 @@
     font-family:'Bebas Neue',sans-serif; font-size:.85rem; letter-spacing:.25em; color:var(--forge);
   }
 
-  /* SECTIONS COMMON */
+  /* ─── SECTIONS COMMON ─── */
   section { padding:90px 24px; position:relative; }
   .s-label {
     font-family:'Barlow Condensed', sans-serif;
-    font-size:.7rem; letter-spacing:.45em; text-transform:uppercase;
+    font-size:.52rem; letter-spacing:.5em; text-transform:uppercase;
     color:var(--ember); text-align:center; margin-bottom:12px;
+    text-shadow:0 0 20px rgba(232,82,10,.5);
   }
   .s-title {
     font-family:'Bebas Neue', sans-serif;
-    font-size:clamp(2.4rem,6vw,4.5rem); letter-spacing:.06em; line-height:1;
+    font-size:clamp(2.6rem,6vw,4.8rem); letter-spacing:.06em; line-height:1;
     text-align:center; color:var(--ash); margin-bottom:16px;
+    text-shadow:2px 2px 0 rgba(0,0,0,.8), 0 0 40px rgba(0,0,0,.5);
   }
   .s-title span { color:var(--forge-bright); }
-  .s-body { text-align:center; max-width:620px; margin:0 auto 56px; font-size:1.1rem; line-height:1.8; color:var(--ash-dim); }
+  .s-body { text-align:center; max-width:620px; margin:0 auto 56px; font-size:1.15rem; line-height:1.85; color:var(--ash-dim); }
 
-  /* MASALAH */
+  /* ─── MASALAH ─── */
   #masalah { background:var(--iron-soft); }
+  /* Diagonal slash accent at top */
+  #masalah::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:4px;
+    background:linear-gradient(90deg, var(--blood), var(--ember), var(--blood));
+  }
   .masalah-grid {
     display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
     gap:2px; max-width:1100px; margin:0 auto;
   }
   .masalah-card {
     background:var(--iron-plate); border-top:3px solid var(--blood);
-    padding:36px 28px; transition:background .3s, border-color .3s; position:relative; overflow:hidden;
+    padding:36px 28px; transition:background .3s, border-color .25s, transform .25s; position:relative; overflow:hidden;
+  }
+  .masalah-card::before {
+    content:''; position:absolute; top:0; left:0; width:3px; height:100%;
+    background:var(--blood); opacity:0; transition:opacity .3s;
   }
   .masalah-card::after {
     content:''; position:absolute; bottom:0; left:0; right:0; height:0;
-    background:linear-gradient(to top,rgba(107,15,15,.3),transparent); transition:height .4s;
+    background:linear-gradient(to top,rgba(107,15,15,.35),transparent); transition:height .4s;
   }
-  .masalah-card:hover { background:var(--iron-edge); border-color:var(--ember); }
+  .masalah-card:hover { background:var(--iron-edge); border-color:var(--ember); transform:translateY(-3px); }
+  .masalah-card:hover::before { opacity:1; }
   .masalah-card:hover::after { height:100%; }
-  .masalah-icon { font-size:1.8rem; margin-bottom:14px; display:block; }
+  .masalah-icon { font-size:2rem; margin-bottom:14px; display:block; }
   .masalah-card h3 {
     font-family:'Barlow Condensed', sans-serif;
-    font-size:1.15rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
-    color:var(--ash); margin-bottom:8px;
+    font-size:1.2rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ash); margin-bottom:10px;
   }
-  .masalah-card p { font-size:.95rem; line-height:1.7; color:var(--ash-dim); }
+  .masalah-card p { font-size:1.15rem; line-height:1.75; color:var(--ash-dim); }
 
-  /* SOLUSI */
+  /* ─── SOLUSI ─── */
   #solusi { background:var(--iron); }
   .solusi-wrap { max-width:1080px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:center; }
   .solusi-img-wrap { position:relative; display:flex; justify-content:center; }
   .solusi-img-wrap img {
-    width:100%; max-width:400px;
-    filter:drop-shadow(0 24px 60px rgba(0,0,0,.9)) drop-shadow(0 0 30px rgba(201,150,12,.2));
+    width:100%; max-width:800px;
+    filter:drop-shadow(0 24px 60px rgba(0,0,0,.9)) drop-shadow(0 0 40px rgba(201,150,12,.25));
     animation:levitate 5s ease-in-out infinite;
   }
   .solusi-img-wrap::before {
     content:''; position:absolute; inset:-30px;
-    background:radial-gradient(ellipse at center,rgba(232,82,10,.07) 0%,transparent 70%);
+    background:radial-gradient(ellipse at center,rgba(232,82,10,.09) 0%,transparent 70%);
   }
   .solusi-text .kicker {
     font-family:'Barlow Condensed', sans-serif;
-    font-size:.75rem; letter-spacing:.4em; text-transform:uppercase;
+    font-size:.75rem; letter-spacing:.45em; text-transform:uppercase;
     color:var(--ember); margin-bottom:14px; display:block;
+    text-shadow:0 0 20px rgba(232,82,10,.5);
   }
   .solusi-text h2 {
     font-family:'Bebas Neue', sans-serif;
-    font-size:clamp(2rem,4vw,3rem); letter-spacing:.06em;
+    font-size:clamp(2rem,4vw,3.2rem); letter-spacing:.06em;
     color:var(--ash); line-height:1.05; margin-bottom:24px;
+    text-shadow:2px 2px 0 rgba(0,0,0,.8);
   }
   .solusi-text h2 span { color:var(--forge-bright); }
-  .solusi-text p { font-size:1.05rem; line-height:1.85; color:var(--ash-dim); margin-bottom:14px; }
+  .solusi-text p { font-size:1.25rem; line-height:1.85; color:var(--ash-dim); margin-bottom:14px; }
   .pilar-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:28px; }
   .pilar-item {
     display:flex; align-items:flex-start; gap:10px;
     padding:14px; background:rgba(201,150,12,.04);
-    border:1px solid rgba(201,150,12,.15); border-left:3px solid var(--forge);
-    transition:background .25s;
+    border:1px solid rgba(201,150,12,.18); border-left:3px solid var(--forge);
+    transition:background .25s, border-color .25s, transform .2s;
   }
-  .pilar-item:hover { background:rgba(201,150,12,.08); }
+  .pilar-item:hover { background:rgba(201,150,12,.1); border-color:rgba(201,150,12,.45); transform:translateX(3px); }
   .pilar-ico { font-size:1.3rem; flex-shrink:0; margin-top:2px; }
   .pilar-item strong {
     display:block; font-family:'Barlow Condensed', sans-serif;
-    font-size:.8rem; letter-spacing:.12em; text-transform:uppercase;
+    font-size:.82rem; letter-spacing:.15em; text-transform:uppercase;
     color:var(--forge-bright); margin-bottom:3px;
   }
-  .pilar-item span { font-size:.88rem; color:var(--ash-dim); }
+  .pilar-item span { font-size:1rem; color:var(--ash-dim); }
 
-  /* ══ STORY SECTION ══ */
+  /* ─── STORY SECTION ─── */
   #story { background:var(--iron-soft); padding:0; overflow:hidden; }
   .story-intro { padding:100px 24px 72px; max-width:800px; margin:0 auto; text-align:center; }
   .story-intro .s-label { margin-bottom:14px; }
@@ -280,11 +349,11 @@
   .story-img { position:relative; overflow:hidden; }
   .story-img img {
     width:100%; height:100%; object-fit:cover;
-    filter:brightness(.72) saturate(.85) sepia(.15);
+    filter:brightness(1) saturate(1.85) sepia(.2) contrast(1.05);
     transition:transform 8s ease, filter .5s;
-    transform:scale(1.04);
+    transform:scale(1.05);
   }
-  .story-img:hover img { transform:scale(1.08); filter:brightness(.65) saturate(1); }
+  .story-img:hover img { transform:scale(1.1); filter:brightness(1.05) saturate(1.1) sepia(.1) contrast(1.1); }
   .story-block:nth-child(odd)  .story-img::after {
     content:''; position:absolute; inset:0; pointer-events:none;
     background:linear-gradient(to right, transparent 50%, var(--iron-soft) 100%);
@@ -305,44 +374,51 @@
   .story-block:nth-child(even) .story-text::before { right:0; background:linear-gradient(to bottom,transparent,var(--ember),transparent); }
 
   .story-num {
-    font-family:'Bebas Neue', sans-serif; font-size:5rem; line-height:1;
-    color:rgba(201,150,12,.07); margin-bottom:-12px; display:block;
+    font-family:'Bebas Neue', sans-serif; font-size:5.5rem; line-height:1;
+    color:rgba(201,150,12,.08); margin-bottom:-14px; display:block;
   }
   .story-tag {
     font-family:'Barlow Condensed', sans-serif;
-    font-size:.7rem; letter-spacing:.4em; text-transform:uppercase;
+    font-size:.52rem; letter-spacing:.45em; text-transform:uppercase;
     color:var(--ember); margin-bottom:12px; display:block;
+    text-shadow:0 0 18px rgba(232,82,10,.45);
   }
   .story-text h3 {
     font-family:'Bebas Neue', sans-serif;
     font-size:clamp(1.8rem,3.5vw,2.8rem); letter-spacing:.06em; line-height:1.05;
     color:var(--ash); margin-bottom:18px;
+    text-shadow:2px 2px 0 rgba(0,0,0,.7);
   }
   .story-text h3 span { color:var(--forge-bright); }
-  .story-text p { font-size:1.02rem; line-height:1.85; color:var(--ash-dim); margin-bottom:12px; }
+  .story-text p { font-size:1.12rem; line-height:1.85; color:var(--ash-dim); margin-bottom:12px; }
   .story-text p:last-of-type { margin-bottom:0; }
   .story-fact {
     margin-top:22px; padding:14px 18px;
     border-left:3px solid var(--forge);
-    background:rgba(201,150,12,.05);
-    font-size:.93rem; line-height:1.65; color:var(--ash-dim);
+    background:rgba(201,150,12,.06);
+    font-size:1.05rem; line-height:1.65; color:var(--ash-dim);
   }
   .story-fact strong { color:var(--forge-bright); }
 
   .story-strip {
     background:var(--iron-plate);
-    border-top:1px solid rgba(201,150,12,.12);
-    border-bottom:1px solid rgba(201,150,12,.12);
-    padding:40px 24px; text-align:center;
+    border-top:2px solid rgba(201,150,12,.2);
+    border-bottom:2px solid rgba(201,150,12,.2);
+    padding:42px 24px; text-align:center;
+    position:relative; overflow:hidden;
+  }
+  .story-strip::before {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(90deg, transparent, rgba(232,82,10,.04), transparent);
   }
   .story-strip p {
     font-family:'Bebas Neue', sans-serif;
-    font-size:clamp(1.2rem,3vw,2rem); letter-spacing:.14em; color:var(--forge);
-    text-shadow:0 0 30px rgba(201,150,12,.25);
+    font-size:clamp(1.3rem,3.2vw,2.1rem); letter-spacing:.18em; color:var(--forge);
+    text-shadow:0 0 40px rgba(201,150,12,.35);
   }
   .story-strip p span { color:var(--ash-mute); }
 
-  /* BAHAN */
+  /* ─── BAHAN ─── */
   #bahan { background:var(--iron); padding-bottom:0; }
   .bahan-grid {
     display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
@@ -351,124 +427,267 @@
   .bahan-card { position:relative; overflow:hidden; aspect-ratio:4/3; cursor:pointer; }
   .bahan-card img {
     width:100%; height:100%; object-fit:cover;
-    filter:brightness(.4) saturate(.6) sepia(.3);
+    filter:brightness(.9) saturate(1.1) contrast(1.05);
     transition:transform .6s ease, filter .4s ease;
   }
-  .bahan-card:hover img { transform:scale(1.07); filter:brightness(.3) saturate(1) sepia(.2); }
+  .bahan-card:hover img { transform:scale(1.08); filter:brightness(1) saturate(1.2) contrast(1.08); }
   .bahan-overlay {
     position:absolute; inset:0;
-    background:linear-gradient(to top,rgba(12,10,7,.97) 0%,rgba(12,10,7,.5) 45%,transparent 100%);
+    background:linear-gradient(to top,rgba(12,10,7,.96) 0%,rgba(12,10,7,.4) 40%,transparent 70%);
     display:flex; flex-direction:column; justify-content:flex-end; padding:24px; transition:background .3s;
   }
   .bahan-card:hover .bahan-overlay {
-    background:linear-gradient(to top,rgba(12,10,7,.99) 0%,rgba(12,10,7,.65) 55%,rgba(232,82,10,.08) 100%);
+    background:linear-gradient(to top,rgba(12,10,7,.98) 0%,rgba(12,10,7,.55) 45%,rgba(232,82,10,.06) 100%);
   }
   .bahan-num {
     font-family:'Bebas Neue', sans-serif; font-size:3rem; color:rgba(201,150,12,.12);
     position:absolute; top:14px; right:18px; line-height:1; transition:color .3s;
   }
-  .bahan-card:hover .bahan-num { color:rgba(201,150,12,.3); }
-  .bahan-name { font-family:'Bebas Neue', sans-serif; font-size:1.3rem; letter-spacing:.12em; text-transform:uppercase; color:var(--forge-bright); margin-bottom:4px; }
-  .bahan-latin { font-style:italic; font-size:.82rem; color:var(--ash-mute); margin-bottom:8px; }
-  .bahan-desc { font-size:.9rem; line-height:1.6; color:var(--ash-dim); max-height:0; overflow:hidden; transition:max-height .45s ease, opacity .3s; opacity:0; }
+  .bahan-card:hover .bahan-num { color:rgba(201,150,12,.35); }
+  .bahan-name { font-family:'Bebas Neue', sans-serif; font-size:1.7rem; letter-spacing:.14em; text-transform:uppercase; color:var(--forge-bright); margin-bottom:4px; }
+  .bahan-latin { font-style:italic; font-size:1.05rem; color:var(--ash-mute); margin-bottom:8px; }
+  .bahan-desc { font-size:1.05rem; line-height:1.6; color:var(--ash-dim); max-height:0; overflow:hidden; transition:max-height .45s ease, opacity .3s; opacity:0; }
   .bahan-card:hover .bahan-desc { max-height:110px; opacity:1; }
   .bahan-tag {
-    display:inline-block; margin-top:8px; padding:3px 10px;
+    display:inline-block; margin-top:8px; padding:4px 10px;
     border:1px solid var(--ember-dim);
     font-family:'Barlow Condensed', sans-serif;
-    font-size:.65rem; letter-spacing:.2em; text-transform:uppercase;
+    font-size:.75rem; letter-spacing:.22em; text-transform:uppercase;
     color:var(--ember-hot); max-height:0; overflow:hidden;
     transition:max-height .45s ease .08s, opacity .3s .08s; opacity:0;
   }
   .bahan-card:hover .bahan-tag { max-height:36px; opacity:1; }
 
-  /* CARA PAKAI */
-  #cara-pakai { background:var(--iron-plate); text-align:center; }
-  .steps { display:flex; justify-content:center; gap:0; max-width:860px; margin:0 auto 60px; flex-wrap:wrap; }
-  .step { flex:1; min-width:180px; padding:32px 20px; position:relative; }
-  .step:not(:last-child)::after {
-    content:'→'; position:absolute; right:-6px; top:50%;
-    transform:translateY(-50%); color:var(--ember-dim); font-size:1.3rem;
+  /* ─── CARA PAKAI ─── */
+  #cara-pakai {
+    background:var(--iron-plate);
+    text-align:center; overflow:hidden;
   }
-  .step-num {
-    width:54px; height:54px; border:2px solid var(--ember-dim);
-    display:flex; align-items:center; justify-content:center; margin:0 auto 16px;
-    font-family:'Bebas Neue', sans-serif; font-size:1.6rem; color:var(--ember-hot);
-    background:rgba(232,82,10,.06);
+  #cara-pakai::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:4px;
+    background:linear-gradient(90deg, var(--ember-dim), var(--forge), var(--ember-dim));
   }
-  .step h3 { font-family:'Barlow Condensed', sans-serif; font-size:.9rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ash); margin-bottom:8px; }
-  .step p { font-size:.92rem; color:var(--ash-dim); line-height:1.6; }
+  /* Decorative large background text */
+  #cara-pakai::after {
+    content:'RITUAL'; position:absolute;
+    top:50%; left:50%; transform:translate(-50%,-50%);
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(8rem,20vw,18rem); letter-spacing:.2em;
+    color:rgba(201,150,12,.03); pointer-events:none; white-space:nowrap;
+    line-height:1;
+  }
 
-  /* ORDER */
+  /* ── Step cards ── */
+  .steps {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:2px;
+    max-width:960px; margin:0 auto 0;
+    position:relative; z-index:1;
+  }
+  .step {
+    padding:52px 32px 48px;
+    background:var(--iron-soft);
+    position:relative; overflow:hidden;
+    transition:background .35s;
+    display:flex; flex-direction:column; align-items:center; gap:0;
+  }
+  .step:hover { background:var(--iron-edge); }
+
+  /* Vertical gold line connector between cards */
+  .step:not(:last-child)::after {
+    content:''; position:absolute;
+    top:50%; right:-1px;
+    width:2px; height:60%;
+    transform:translateY(-50%);
+    background:linear-gradient(to bottom, transparent, var(--forge), transparent);
+  }
+
+  /* Top accent bar per step */
+  .step::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg, transparent, var(--ember-dim), transparent);
+    transition:background .35s;
+  }
+  .step:hover::before {
+    background:linear-gradient(90deg, transparent, var(--ember), transparent);
+  }
+
+  /* Step number — large ghost behind icon */
+  .step-ghost-num {
+    position:absolute; top:16px; right:20px;
+    font-family:'Bebas Neue',sans-serif;
+    font-size:5rem; line-height:1; color:rgba(201,150,12,.06);
+    transition:color .35s;
+  }
+  .step:hover .step-ghost-num { color:rgba(201,150,12,.12); }
+
+  /* Icon container */
+  .step-icon {
+    width:88px; height:88px;
+    border:1px solid rgba(201,150,12,.2);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:28px;
+    background:rgba(201,150,12,.04);
+    position:relative;
+    transition:border-color .35s, background .35s, box-shadow .35s;
+  }
+  .step:hover .step-icon {
+    border-color:var(--forge);
+    background:rgba(201,150,12,.09);
+    box-shadow:0 0 30px rgba(201,150,12,.2), inset 0 0 20px rgba(201,150,12,.04);
+  }
+  .step-icon svg { width:40px; height:40px; }
+
+  /* Pulse ring on hover */
+  .step-icon::after {
+    content:''; position:absolute; inset:-8px; border-radius:50%;
+    border:1px solid rgba(201,150,12,.0);
+    transition:border-color .35s, inset .35s;
+  }
+  .step:hover .step-icon::after {
+    inset:-14px;
+    border-color:rgba(201,150,12,.2);
+  }
+
+  .step-label {
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:.75rem; letter-spacing:.45em; text-transform:uppercase;
+    color:var(--ember); margin-bottom:10px;
+  }
+  .step h3 {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(1.4rem,2.5vw,1.9rem); letter-spacing:.08em;
+    color:var(--ash); margin-bottom:14px; line-height:1.1;
+  }
+  .step p {
+    font-size:.95rem; color:var(--ash-dim); line-height:1.7;
+    max-width:220px;
+  }
+
+  /* Bottom accent strip inside each step */
+  .step-rule {
+    width:40px; height:1px; margin:20px auto 0;
+    background:linear-gradient(90deg,transparent,var(--forge),transparent);
+    transition:width .35s;
+  }
+  .step:hover .step-rule { width:80px; }
+
+  /* Timing note strip */
+  .steps-timing {
+    display:grid; grid-template-columns:repeat(3,1fr); gap:2px;
+    max-width:960px; margin:2px auto 60px;
+  }
+  .timing-cell {
+    background:rgba(201,150,12,.04);
+    border-top:1px solid rgba(201,150,12,.1);
+    padding:14px 20px; text-align:center;
+  }
+  .timing-cell .t-label {
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:.75rem; letter-spacing:.35em; text-transform:uppercase;
+    color:var(--ash-mute); margin-bottom:4px;
+  }
+  .timing-cell .t-val {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:1.25rem; letter-spacing:.1em; color:var(--forge-bright);
+  }
+
+  @media (max-width:640px) {
+    .steps { grid-template-columns:1fr; }
+    .step:not(:last-child)::after {
+      top:auto; right:0; bottom:-1px;
+      width:60%; height:2px;
+      left:50%; transform:translateX(-50%);
+      background:linear-gradient(to right, transparent, var(--forge), transparent);
+    }
+    .steps-timing { grid-template-columns:1fr; }
+  }
+
+  /* ─── ORDER ─── */
   #order { background:var(--iron); position:relative; overflow:hidden; }
   #order::before {
     content:''; position:absolute; inset:0;
-    background:radial-gradient(ellipse 70% 50% at 50% 100%,rgba(232,82,10,.07) 0%,transparent 70%);
+    background:radial-gradient(ellipse 70% 50% at 50% 100%,rgba(232,82,10,.09) 0%,transparent 70%);
   }
   .order-wrap { max-width:980px; margin:0 auto; position:relative; z-index:2; }
   .order-card {
-    background:var(--iron-plate); border:1px solid rgba(201,150,12,.2);
-    border-top:3px solid var(--forge); padding:60px 48px;
+    background:var(--iron-plate); border:1px solid rgba(201,150,12,.25);
+    border-top:4px solid var(--forge); padding:60px 48px;
     display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center;
     position:relative; overflow:hidden;
   }
   .order-card::before {
     content:''; position:absolute; inset:0;
-    background:linear-gradient(135deg,rgba(201,150,12,.025) 0%,transparent 50%); pointer-events:none;
+    background:linear-gradient(135deg,rgba(201,150,12,.03) 0%,transparent 50%); pointer-events:none;
+  }
+  /* Corner accent slashes */
+  .order-card::after {
+    content:''; position:absolute; bottom:0; right:0;
+    width:60px; height:60px;
+    border-bottom:3px solid rgba(232,82,10,.35);
+    border-right:3px solid rgba(232,82,10,.35);
+    pointer-events:none;
   }
   .order-image img {
     width:100%; max-width:320px; display:block; margin:0 auto;
-    filter:drop-shadow(0 20px 50px rgba(0,0,0,.95)) drop-shadow(0 0 20px rgba(201,150,12,.2));
+    filter:drop-shadow(0 20px 50px rgba(0,0,0,.95)) drop-shadow(0 0 30px rgba(201,150,12,.25));
     animation:levitate 5.5s ease-in-out infinite;
   }
   .order-info h2 {
     font-family:'Bebas Neue', sans-serif;
-    font-size:clamp(2.5rem,5vw,3.8rem); letter-spacing:.08em;
+    font-size:clamp(2.8rem,5vw,4.2rem); letter-spacing:.1em;
     color:var(--forge-bright); line-height:1; margin-bottom:4px;
+    text-shadow:2px 2px 0 rgba(0,0,0,.8), 0 0 40px rgba(201,150,12,.3);
   }
   .order-info .tagline {
     font-family:'Barlow Condensed', sans-serif;
-    font-size:.75rem; letter-spacing:.3em; text-transform:uppercase;
+    font-size:.75rem; letter-spacing:.35em; text-transform:uppercase;
     color:var(--ash-mute); margin-bottom:28px; display:block;
   }
-  .order-info p { font-size:1rem; line-height:1.8; color:var(--ash-dim); margin-bottom:22px; }
+  .order-info p { font-size:1.1rem; line-height:1.8; color:var(--ash-dim); margin-bottom:22px; }
   .price-box {
-    background:rgba(232,82,10,.07); border:1px solid rgba(232,82,10,.3);
-    border-left:3px solid var(--ember); padding:18px 24px; margin-bottom:24px;
+    background:rgba(232,82,10,.08); border:1px solid rgba(232,82,10,.35);
+    border-left:4px solid var(--ember); padding:18px 24px; margin-bottom:24px;
   }
-  .price-label { font-family:'Barlow Condensed', sans-serif; font-size:.65rem; letter-spacing:.35em; text-transform:uppercase; color:var(--ember); margin-bottom:5px; }
-  .price-amount { font-family:'Bebas Neue', sans-serif; font-size:3rem; color:var(--forge-bright); letter-spacing:.04em; line-height:1; }
-  .price-unit { font-size:.9rem; color:var(--ash-dim); margin-top:3px; }
+  .price-label { font-family:'Barlow Condensed', sans-serif; font-size:.75rem; letter-spacing:.4em; text-transform:uppercase; color:var(--ember); margin-bottom:5px; text-shadow:0 0 14px rgba(232,82,10,.5); }
+  .price-amount { font-family:'Bebas Neue', sans-serif; font-size:3.2rem; color:var(--forge-bright); letter-spacing:.04em; line-height:1; text-shadow:0 0 20px rgba(201,150,12,.35); }
+  .price-unit { font-size:1rem; color:var(--ash-dim); margin-top:3px; }
   .badges { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:26px; }
   .badge {
-    padding:5px 12px; border:1px solid rgba(201,150,12,.2);
+    padding:5px 12px; border:1px solid rgba(201,150,12,.25);
     font-family:'Barlow Condensed', sans-serif;
-    font-size:.65rem; letter-spacing:.15em; text-transform:uppercase;
-    color:var(--forge); background:rgba(201,150,12,.04);
+    font-size:.65rem; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--forge); background:rgba(201,150,12,.05);
+    transition:background .2s, border-color .2s;
   }
+  .badge:hover { background:rgba(201,150,12,.12); border-color:rgba(201,150,12,.5); }
   .btn-wa {
     display:inline-flex; align-items:center; gap:12px;
     background:linear-gradient(135deg,#145c26,#1fa83e,#145c26); color:#fff;
     padding:18px 36px; font-family:'Barlow Condensed', sans-serif;
-    font-size:.9rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase;
+    font-size:.9rem; font-weight:700; letter-spacing:.25em; text-transform:uppercase;
     text-decoration:none; width:100%; justify-content:center;
     clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);
     transition:background .3s, transform .3s, box-shadow .3s;
   }
-  .btn-wa:hover { background:linear-gradient(135deg,#1a7a33,#28c850,#1a7a33); transform:translateY(-3px); box-shadow:0 10px 36px rgba(31,168,62,.45); }
+  .btn-wa:hover { background:linear-gradient(135deg,#1a7a33,#28c850,#1a7a33); transform:translateY(-3px); box-shadow:0 10px 40px rgba(31,168,62,.5); }
   .btn-wa svg { width:20px; height:20px; fill:white; flex-shrink:0; }
 
-  /* FOOTER */
-  footer { background:var(--iron-soft); border-top:1px solid rgba(201,150,12,.12); padding:44px 24px; text-align:center; }
-  .footer-logo { height:56px; margin-bottom:16px; opacity:.75; filter:drop-shadow(0 0 8px rgba(201,150,12,.35)); }
-  footer p { font-size:.88rem; color:var(--ash-mute); margin-bottom:4px; }
+  /* ─── FOOTER ─── */
+  footer { background:var(--iron-soft); border-top:1px solid rgba(201,150,12,.15); padding:44px 24px; text-align:center; }
+  .footer-logo { height:80px; margin-bottom:16px; opacity:.75; filter:drop-shadow(0 0 10px rgba(201,150,12,.4)); }
+  footer p { font-size:1rem; color:var(--ash-mute); margin-bottom:4px; }
   footer small { font-size:.72rem; color:rgba(106,92,68,.45); }
 
-  /* SCROLL REVEAL */
+  /* ─── SCROLL REVEAL ─── */
   .reveal { opacity:0; transform:translateY(32px); transition:opacity .75s ease, transform .75s ease; }
   .reveal.visible { opacity:1; transform:translateY(0); }
 
-  /* RESPONSIVE */
+  /* ─── RESPONSIVE ─── */
+
+  /* Tablet: 768–900px */
   @media (max-width:900px) {
     .story-block { grid-template-columns:1fr; min-height:auto; }
     .story-block.flip { direction:ltr; }
@@ -479,15 +698,54 @@
     .story-block:nth-child(odd)  .story-text::before,
     .story-block:nth-child(even) .story-text::before { left:0; right:auto; }
   }
+
+  /* Mobile: ≤768px */
   @media (max-width:768px) {
     nav { padding:12px 20px; }
     .nav-links { display:none; }
+
+    /* Hero: fully responsive, no clipping */
+    #hero {
+      min-height:100svh;
+      padding-bottom:72px;
+      justify-content:flex-end;
+    }
+    /* parallax banner: already handled by background-position:75%/80% in CSS */
+    .hero-inner {
+      gap:10px;
+      padding:0 16px;
+    }
+    .hero-kicker { font-size:.68rem; letter-spacing:.3em; }
+    .hero-logo-img { width:min(280px, 85vw); }
+    .hero-sub {
+      font-size:.85rem; letter-spacing:.2em;
+      max-width:90%; word-break:keep-all;
+    }
+    .hero-desc {
+      font-size:.9rem; line-height:1.75;
+      max-width:100%; padding:0 4px;
+    }
+    .btn-forge { padding:13px 32px; font-size:.92rem; letter-spacing:.22em; }
+
     .solusi-wrap { grid-template-columns:1fr; gap:40px; }
     .solusi-img-wrap { order:-1; }
     .pilar-grid { grid-template-columns:1fr; }
     .order-card { grid-template-columns:1fr; padding:36px 24px; gap:36px; }
     .bahan-grid { grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); }
     .step:not(:last-child)::after { display:none; }
+
+    section { padding:70px 18px; }
+    .s-title { font-size:clamp(2rem,9vw,3rem); }
+  }
+
+  /* Extra small: ≤420px */
+  @media (max-width:420px) {
+    .hero-logo-img { width:min(240px, 88vw); }
+    .hero-sub { font-size:.78rem; letter-spacing:.14em; }
+    .hero-desc { font-size:.85rem; }
+    .masalah-grid { grid-template-columns:1fr; }
+    .bahan-grid { grid-template-columns:1fr; }
+    .order-card { padding:28px 18px; }
   }
 </style>
 </head>
@@ -513,7 +771,14 @@
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-banner"></div>
+  <div class="hero-banner">
+    <picture>
+      <!-- Mobile portrait: gunakan MG2.png yang sudah portrait -->
+      <source media="(max-width: 768px)" srcset="MG2.png">
+      <!-- Desktop / tablet landscape: banner wide -->
+      <img src="madoeragabanner.png" alt="" aria-hidden="true">
+    </picture>
+  </div>
   <div id="flames"></div>
   <div class="hero-inner">
     <p class="hero-kicker">Produk Herbal Premium Indonesia</p>
@@ -545,7 +810,7 @@
       <p>Penurunan hormon dan sirkulasi darah yang buruk membuat pria kehilangan kepercayaan diri dan kualitas hubungan yang bermakna.</p>
     </div>
     <div class="masalah-card reveal">
-      <span class="masalah-icon">🌑</span>
+      <span class="masalah-icon">🛏</span>
       <h3>Tidur Tak Berkualitas</h3>
       <p>Tubuh sulit beristirahat dengan baik, memperparah kelelahan fisik dan mental yang menumpuk dari hari ke hari.</p>
     </div>
@@ -563,7 +828,7 @@
 <section id="solusi">
   <div class="solusi-wrap">
     <div class="solusi-img-wrap reveal">
-      <img src="Madoeraga1.png" alt="Madoeraga Produk">
+      <img src="mgS.png" alt="Madoeraga Produk">
     </div>
     <div class="solusi-text">
       <span class="kicker reveal">Solusi Herbal Terpercaya</span>
@@ -583,7 +848,7 @@ Dibuat dari perpaduan 8 bahan herbal pilihan berkualitas tinggi yang telah lama 
 
 <div class="divider"><span>✦</span></div>
 
-<!-- ══ APA ITU MADOERAGA — STORY SECTION ══ -->
+<!-- STORY SECTION -->
 <section id="story">
   <div class="story-intro">
     <p class="s-label reveal">Lebih dari Sekadar Madu</p>
@@ -612,7 +877,7 @@ Tradisi dan kualitas modern dalam setiap tetesnya.
 
 <div class="story-block flip reveal">
   <div class="story-img">
-    <img src="MB3a.png" alt="Madoeraga dan bahan herbal flatlay">
+    <img src="MG6.png" alt="Madoeraga dan bahan herbal flatlay">
   </div>
   <div class="story-text">
     <span class="story-num">02</span>
@@ -626,13 +891,13 @@ Tradisi dan kualitas modern dalam setiap tetesnya.
 
 <div class="story-block reveal">
   <div class="story-img">
-    <img src="MG2.png" alt="Infografis 4 Pilar Madoeraga">
+    <img src="mgpc.png" alt="Infografis 4 Pilar Madoeraga">
   </div>
   <div class="story-text">
     <span class="story-num">03</span>
     <span class="story-tag">Sistem 4 Pilar</span>
     <h3>Dirancang untuk <span>Bekerja Bersama</span></h3>
-    <p>Keunggulan Madoeraga terletak pada filosofi 4 Pilar: <strong style="color:var(--forge-bright)">Keempatnya saling terhubung, mencerminkan kebutuhan pria modern yang dinamis.</p>
+    <p>Keunggulan Madoeraga terletak pada filosofi 4 Pilar: <strong style="color:var(--forge-bright)">Keempatnya saling terhubung, mencerminkan kebutuhan pria modern yang dinamis.</strong></p>
     <p>Dengan pendekatan yang menyeluruh, setiap pilar berperan dalam menjaga ritme tubuh agar tetap selaras dalam menjalani aktivitas harian.</p>
     <div class="story-fact"><strong>Keberanian · Ketahanan · Kekuatan · Kehormatan</strong> — empat nilai yang menjadi landasan karakter pria sejati Indonesia.</div>
   </div>
@@ -695,14 +960,92 @@ Tradisi dan kualitas modern dalam setiap tetesnya.
 
 <!-- CARA PAKAI -->
 <section id="cara-pakai">
-  <p class="s-label reveal">Mudah &amp; Praktis</p>
+  <p class="s-label reveal">Ritual Harian</p>
   <h2 class="s-title reveal">Cara <span>Mengonsumsi</span></h2>
-  <p class="s-body reveal">Cukup 3 langkah sederhana untuk merasakan manfaatnya setiap hari.</p>
+  <p class="s-body reveal">Tiga langkah sederhana. Satu komitmen. Hasil yang terasa nyata.</p>
+
   <div class="steps">
-    <div class="step reveal"><div class="step-num">1</div><h3>Ambil Satu Sendok</h3><p>Ambil 1–2 sendok teh Madoeraga setiap hari.</p></div>
-    <div class="step reveal"><div class="step-num">2</div><h3>Konsumsi Langsung</h3><p>Bisa diminum langsung atau dicampur air hangat.</p></div>
-    <div class="step reveal"><div class="step-num">3</div><h3>Rasakan Manfaatnya</h3><p>Konsumsi rutin untuk hasil optimal dalam 2–4 minggu.</p></div>
+
+    <!-- STEP 1 -->
+    <div class="step reveal">
+      <span class="step-ghost-num">01</span>
+      <div class="step-icon">
+        <!-- Spoon / scoop icon -->
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="20" cy="10" rx="9" ry="6" stroke="#C9960C" stroke-width="1.5"/>
+          <line x1="20" y1="16" x2="20" y2="34" stroke="#C9960C" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- honey drip -->
+          <path d="M16 10 Q15 14 16 17" stroke="#FFBA00" stroke-width="1" stroke-linecap="round" opacity=".6"/>
+        </svg>
+      </div>
+      <span class="step-label">Langkah 01</span>
+      <h3>Ambil<br>1–2 Sendok Teh</h3>
+      <p>Gunakan sendok bersih. Takar 1–2 sendok teh Madoeraga — tidak perlu lebih.</p>
+      <div class="step-rule"></div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step reveal">
+      <span class="step-ghost-num">02</span>
+      <div class="step-icon">
+        <!-- Cup / glass icon -->
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 12 L13 34 H27 L30 12 Z" stroke="#C9960C" stroke-width="1.5" stroke-linejoin="round"/>
+          <line x1="10" y1="12" x2="30" y2="12" stroke="#C9960C" stroke-width="1.5"/>
+          <!-- steam lines -->
+          <path d="M16 7 Q17 4 16 2" stroke="#FFBA00" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
+          <path d="M20 8 Q21 5 20 3" stroke="#FFBA00" stroke-width="1.2" stroke-linecap="round" opacity=".7"/>
+          <path d="M24 7 Q25 4 24 2" stroke="#FFBA00" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
+          <!-- liquid fill hint -->
+          <path d="M13.5 20 L26.5 20" stroke="rgba(201,150,12,.35)" stroke-width="1"/>
+        </svg>
+      </div>
+      <span class="step-label">Langkah 02</span>
+      <h3>Langsung atau<br>Campur Air Hangat</h3>
+      <p>Nikmati langsung dari sendok, atau larutkan dalam segelas air hangat (bukan mendidih).</p>
+      <div class="step-rule"></div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step reveal">
+      <span class="step-ghost-num">03</span>
+      <div class="step-icon">
+        <!-- Lightning / energy icon -->
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Calendar/cycle hint -->
+          <rect x="7" y="10" width="26" height="22" rx="2" stroke="#C9960C" stroke-width="1.5"/>
+          <line x1="7" y1="16" x2="33" y2="16" stroke="#C9960C" stroke-width="1.5"/>
+          <line x1="13" y1="7" x2="13" y2="13" stroke="#C9960C" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="27" y1="7" x2="27" y2="13" stroke="#C9960C" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- checkmarks -->
+          <path d="M13 23 L16 26 L21 21" stroke="#FFBA00" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M24 25 L27 25" stroke="rgba(201,150,12,.4)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="step-label">Langkah 03</span>
+      <h3>Konsisten<br>Setiap Hari</h3>
+      <p>Konsumsi rutin setiap pagi sebelum beraktivitas. Perubahan mulai terasa di minggu ke-2.</p>
+      <div class="step-rule"></div>
+    </div>
+
   </div>
+
+  <!-- Timing strip -->
+  <div class="steps-timing reveal">
+    <div class="timing-cell">
+      <div class="t-label">Waktu Terbaik</div>
+      <div class="t-val">Pagi Hari</div>
+    </div>
+    <div class="timing-cell">
+      <div class="t-label">Dosis Per Hari</div>
+      <div class="t-val">1 – 2 Sendok Teh</div>
+    </div>
+    <div class="timing-cell">
+      <div class="t-label">Hasil Optimal</div>
+      <div class="t-val">Minggu 2 – 4</div>
+    </div>
+  </div>
+
 </section>
 
 <div class="divider"><span>✦</span></div>
@@ -712,7 +1055,7 @@ Tradisi dan kualitas modern dalam setiap tetesnya.
   <div class="order-wrap">
     <p class="s-label reveal" style="margin-bottom:40px;">Dapatkan Sekarang</p>
     <div class="order-card reveal">
-      <div class="order-image"><img src="Madoeraga3.png" alt="Madoeraga"></div>
+      <div class="order-image"><img src="mg7.jpg" alt="Madoeraga"></div>
       <div class="order-info">
         <h2>MADOERAGA</h2>
         <span class="tagline">Madu Yang Diperkuat Dengan 4 Pilar</span>
@@ -747,35 +1090,58 @@ Tradisi dan kualitas modern dalam setiap tetesnya.
 </footer>
 
 <script>
+  /* ── Splash ── */
   window.addEventListener('load', () => {
     setTimeout(() => document.getElementById('splash').classList.add('hidden'), 2600);
   });
 
+  /* ── Flames ── */
   const flameContainer = document.getElementById('flames');
   const EMBER_COLORS = ['#FF7A1A','#E8520A','#FFBA00','#FF5500','#FF9500'];
-  for (let i = 0; i < 28; i++) {
+  for (let i = 0; i < 32; i++) {
     const f = document.createElement('div');
     f.classList.add('flame');
-    const size  = 2 + Math.random() * 3.5;
+    const size  = 2 + Math.random() * 4;
     const color = EMBER_COLORS[Math.floor(Math.random() * EMBER_COLORS.length)];
     f.style.cssText = `
       left:${Math.random()*100}vw;
       width:${size}px; height:${size}px;
       background:${color};
-      box-shadow:0 0 ${size*2}px ${color};
-      animation-duration:${6 + Math.random()*10}s;
+      box-shadow:0 0 ${size*2.5}px ${color};
+      animation-duration:${5.5 + Math.random()*9}s;
       animation-delay:${Math.random()*12}s;
-      --fx:${(Math.random()*80-40)}px;
-      --fx2:${(Math.random()*120-60)}px;
+      --fx:${(Math.random()*90-45)}px;
+      --fx2:${(Math.random()*130-65)}px;
     `;
     flameContainer.appendChild(f);
   }
 
+  /* ── Scroll Reveal ── */
   const obs = new IntersectionObserver(
     entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
     { threshold: 0.08 }
   );
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  /* ── JS Parallax: banner moves at 40% scroll speed = image stays "behind" ── */
+  (function() {
+    const banner = document.querySelector('.hero-banner');
+    const hero   = document.getElementById('hero');
+    let   ticking = false;
+    function updateParallax() {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const heroH   = hero.offsetHeight;
+      if (scrollY <= heroH) {
+        // Move banner up at 40% of scroll speed (slower = deeper parallax feel)
+        banner.style.transform = 'translateY(' + (scrollY * 0.4) + 'px)';
+      }
+      ticking = false;
+    }
+    window.addEventListener('scroll', function() {
+      if (!ticking) { requestAnimationFrame(updateParallax); ticking = true; }
+    }, { passive:true });
+    updateParallax();
+  })();
 </script>
 </body>
 </html>
