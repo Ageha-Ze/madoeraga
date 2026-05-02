@@ -41,6 +41,71 @@
     opacity: 0.4;
   }
 
+  /* ===== SPLASH SCREEN ===== */
+  #splash {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: var(--black);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+
+  #splash.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .splash-logo {
+    width: min(280px, 70vw);
+    animation: splashPulse 1.5s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px rgba(201,150,12,0.5)) drop-shadow(0 0 80px rgba(201,150,12,0.2));
+  }
+
+  @keyframes splashPulse {
+    0%, 100% { filter: drop-shadow(0 0 20px rgba(201,150,12,0.4)) drop-shadow(0 0 60px rgba(201,150,12,0.15)); transform: scale(1); }
+    50% { filter: drop-shadow(0 0 40px rgba(201,150,12,0.7)) drop-shadow(0 0 100px rgba(201,150,12,0.3)); transform: scale(1.04); }
+  }
+
+  .splash-bar-wrap {
+    width: min(200px, 50vw);
+    height: 2px;
+    background: rgba(201,150,12,0.15);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .splash-bar {
+    height: 100%;
+    background: linear-gradient(to right, var(--gold-dim), var(--gold-bright), var(--gold-dim));
+    width: 0%;
+    animation: loadBar 2s ease forwards;
+  }
+
+  @keyframes loadBar {
+    0% { width: 0%; }
+    100% { width: 100%; }
+  }
+
+  .splash-text {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    animation: blink 1s ease infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
   /* ===== NAVBAR ===== */
   nav {
     position: fixed;
@@ -878,6 +943,15 @@
 </head>
 <body>
 
+<!-- SPLASH SCREEN -->
+<div id="splash">
+  <img src="logomadoeraga.png" alt="Madoeraga" class="splash-logo">
+  <div class="splash-bar-wrap">
+    <div class="splash-bar"></div>
+  </div>
+  <p class="splash-text">Memuat...</p>
+</div>
+
 <!-- NAVBAR -->
 <nav>
   <img src="logomadoeraga.png" alt="Madoeraga Logo">
@@ -1115,7 +1189,7 @@
     <p class="section-label reveal" style="margin-bottom:40px;">Dapatkan Sekarang</p>
     <div class="order-card reveal">
       <div class="order-image">
-        <img src="Madoeraga6.png" alt="Madoeraga">
+        <img src="Madoeraga3.png" alt="Madoeraga">
       </div>
       <div class="order-info">
         <h2>MADOERAGA</h2>
@@ -1157,6 +1231,13 @@
 </footer>
 
 <script>
+  // Splash screen
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('splash').classList.add('hidden');
+    }, 2400);
+  });
+
   // Floating particles
   const container = document.getElementById('particles');
   for (let i = 0; i < 30; i++) {
