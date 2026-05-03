@@ -20,13 +20,38 @@
 <meta name="twitter:card"        content="summary_large_image">
 <meta name="twitter:title"       content="MADOERAGA — Madu Yang Diperkuat Dengan 4 Pilar">
 <meta name="twitter:description" content="Madu herbal premium dengan 8 bahan pilihan Nusantara. Khusus pria aktif. Hanya Rp50.000/botol.">
-<meta name="twitter:image"       content="https://madoeraga.vercel.app/mg8a.png">
+<meta name="twitter:image"       content="https://madoeraga.vercel.app/mga.png">
 
 <!-- ── SEO & WhatsApp fallback ── -->
 <meta name="description"         content="Madu herbal premium dengan 8 bahan pilihan Nusantara. Khusus pria aktif. Halal & P-IRT terdaftar. Hanya Rp50.000/botol.">
 <meta name="theme-color"         content="#C9960C">
 <link rel="icon" type="image/png" href="logomadoeraga.png">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "MADOERAGA",
+  "description": "Madu herbal premium dengan 8 bahan pilihan Nusantara. Khusus untuk pria aktif.",
+  "image": "https://madoeraga.vercel.app/mg8a.png",
+  "brand": {
+    "@type": "Brand",
+    "name": "Madu Sabrina"
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "IDR",
+    "price": "50000",
+    "availability": "https://schema.org/InStock",
+    "seller": {
+      "@type": "Organization",
+      "name": "Madu Sabrina"
+    }
+  }
+}
+</script>
+
 <style>
   :root {
     --ember:        #E8520A;
@@ -107,22 +132,72 @@
   .nav-links a:hover { color:var(--forge-bright); letter-spacing:.28em; }
   .nav-links a:hover::after { transform:scaleX(1); }
 
+  /* ─── HAMBURGER ─── */
+  .hamburger {
+    display:none;
+    flex-direction:column; justify-content:center; gap:5px;
+    width:40px; height:40px; padding:6px;
+    background:none; border:none; cursor:pointer;
+    z-index:600; position:relative; flex-shrink:0;
+  }
+  .hamburger span {
+    display:block; width:100%; height:2px;
+    background:var(--ash); border-radius:2px;
+    transform-origin:center;
+    transition:transform .3s ease, opacity .3s ease, background .25s;
+  }
+  .hamburger:hover span { background:var(--forge-bright); }
+  .hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity:0; transform:scaleX(0); }
+  .hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+
+  /* Overlay backdrop */
+  .nav-overlay {
+    display:none; position:fixed; inset:0; z-index:450;
+    background:rgba(12,10,7,.65); backdrop-filter:blur(3px);
+    opacity:0; transition:opacity .3s; pointer-events:none;
+  }
+  .nav-overlay.open { opacity:1; pointer-events:auto; }
+
+  /* ─── STICKY WA ─── */
+  .sticky-wa {
+    position:fixed; bottom:24px; right:24px; z-index:800;
+    display:flex; align-items:center; gap:10px;
+    background:linear-gradient(135deg,#145c26,#1fa83e,#145c26);
+    color:#fff; text-decoration:none;
+    padding:14px 20px 14px 16px;
+    border-radius:50px;
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:.85rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase;
+    box-shadow:0 8px 32px rgba(31,168,62,.45), 0 2px 8px rgba(0,0,0,.5);
+    transition:transform .3s, box-shadow .3s, opacity .4s;
+    opacity:0; pointer-events:none; transform:translateY(16px);
+  }
+  .sticky-wa.visible { opacity:1; pointer-events:auto; transform:translateY(0); }
+  .sticky-wa svg { width:22px; height:22px; fill:white; flex-shrink:0; }
+  .sticky-wa:hover {
+    background:linear-gradient(135deg,#1a7a33,#28c850,#1a7a33);
+    transform:translateY(-3px);
+    box-shadow:0 14px 40px rgba(31,168,62,.55), 0 2px 8px rgba(0,0,0,.5);
+  }
+  .sticky-wa::before {
+    content:''; position:absolute; inset:0; border-radius:50px;
+    border:2px solid rgba(40,200,80,.4);
+    animation:waPulse 2.4s ease infinite;
+  }
+  @keyframes waPulse {
+    0%,100% { transform:scale(1); opacity:.6; }
+    50%      { transform:scale(1.06); opacity:0; }
+  }
+
   /* ─── HERO ─── */
-  /*
-   * TRUE PARALLAX:
-   * .hero-banner is position:fixed as a direct child of <body> (outside #hero).
-   * It stays pinned to the viewport. All subsequent sections have z-index:2
-   * and solid backgrounds so they slide over the banner as user scrolls.
-   * JS fades the banner out once hero scrolls fully off-screen.
-   */
   #hero {
     position:relative; min-height:100svh;
     display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
-    overflow:hidden;          /* clips the oversized parallax banner */
+    overflow:hidden;
     padding-bottom:80px;
   }
 
-  /* Banner wrapper — oversized for parallax headroom */
   .hero-banner {
     position:absolute;
     top:-15%; left:0; width:100%; height:130%;
@@ -132,15 +207,13 @@
     overflow:hidden;
   }
 
-  /* The actual image — object-fit gives us full control of crop/position */
   .hero-banner img {
     width:100%; height:100%;
     object-fit:cover;
-    object-position:center top;   /* desktop: center horizontally, anchor top */
+    object-position:center top;
     display:block;
   }
 
-  /* Gradient overlay (was on ::after, now on ::before so img sits below it) */
   .hero-banner::after {
     content:''; position:absolute; inset:0; z-index:1;
     background:
@@ -150,23 +223,11 @@
       linear-gradient(to bottom, rgba(12,10,7,.55) 0%, transparent 20%);
   }
 
-  /* Mobile: MG2.png adalah portrait — bottle sudah terpusat, object-position center */
   @media (max-width:768px) {
     .hero-banner img {
-      object-position:center 15%;   /* sedikit ke atas agar botol + spotlight kelihatan */
+      object-position:center 15%;
     }
   }
-
-  .hero-banner::after {
-    content:''; position:absolute; inset:0;
-    background:
-      linear-gradient(to top,  rgba(12,10,7,1) 0%, rgba(12,10,7,.7) 28%, rgba(12,10,7,.25) 60%, transparent 80%),
-      linear-gradient(to right, rgba(12,10,7,.5) 0%, transparent 45%),
-      linear-gradient(to left,  rgba(12,10,7,.5) 0%, transparent 45%),
-      linear-gradient(to bottom, rgba(12,10,7,.55) 0%, transparent 20%);
-  }
-
-  /* Post-hero sections stack normally, no z-index fight needed */
 
   #flames { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:3; }
   .flame { position:absolute; bottom:0; border-radius:50%; animation:riseFlame linear infinite; opacity:0; }
@@ -277,7 +338,6 @@
 
   /* ─── MASALAH ─── */
   #masalah { background:var(--iron-soft); }
-  /* Diagonal slash accent at top */
   #masalah::before {
     content:''; position:absolute; top:0; left:0; right:0; height:4px;
     background:linear-gradient(90deg, var(--blood), var(--ember), var(--blood));
@@ -488,7 +548,6 @@
     content:''; position:absolute; top:0; left:0; right:0; height:4px;
     background:linear-gradient(90deg, var(--ember-dim), var(--forge), var(--ember-dim));
   }
-  /* Decorative large background text */
   #cara-pakai::after {
     content:'RITUAL'; position:absolute;
     top:50%; left:50%; transform:translate(-50%,-50%);
@@ -498,7 +557,6 @@
     line-height:1;
   }
 
-  /* ── Step cards ── */
   .steps {
     display:grid;
     grid-template-columns:repeat(3,1fr);
@@ -515,7 +573,6 @@
   }
   .step:hover { background:var(--iron-edge); }
 
-  /* Vertical gold line connector between cards */
   .step:not(:last-child)::after {
     content:''; position:absolute;
     top:50%; right:-1px;
@@ -524,7 +581,6 @@
     background:linear-gradient(to bottom, transparent, var(--forge), transparent);
   }
 
-  /* Top accent bar per step */
   .step::before {
     content:''; position:absolute; top:0; left:0; right:0; height:3px;
     background:linear-gradient(90deg, transparent, var(--ember-dim), transparent);
@@ -534,7 +590,6 @@
     background:linear-gradient(90deg, transparent, var(--ember), transparent);
   }
 
-  /* Step number — large ghost behind icon */
   .step-ghost-num {
     position:absolute; top:16px; right:20px;
     font-family:'Bebas Neue',sans-serif;
@@ -543,7 +598,6 @@
   }
   .step:hover .step-ghost-num { color:rgba(201,150,12,.12); }
 
-  /* Icon container */
   .step-icon {
     width:88px; height:88px;
     border:1px solid rgba(201,150,12,.2);
@@ -561,7 +615,6 @@
   }
   .step-icon svg { width:40px; height:40px; }
 
-  /* Pulse ring on hover */
   .step-icon::after {
     content:''; position:absolute; inset:-8px; border-radius:50%;
     border:1px solid rgba(201,150,12,.0);
@@ -587,7 +640,6 @@
     max-width:220px;
   }
 
-  /* Bottom accent strip inside each step */
   .step-rule {
     width:40px; height:1px; margin:20px auto 0;
     background:linear-gradient(90deg,transparent,var(--forge),transparent);
@@ -595,7 +647,6 @@
   }
   .step:hover .step-rule { width:80px; }
 
-  /* Timing note strip */
   .steps-timing {
     display:grid; grid-template-columns:repeat(3,1fr); gap:2px;
     max-width:960px; margin:2px auto 60px;
@@ -643,7 +694,6 @@
     content:''; position:absolute; inset:0;
     background:linear-gradient(135deg,rgba(201,150,12,.03) 0%,transparent 50%); pointer-events:none;
   }
-  /* Corner accent slashes */
   .order-card::after {
     content:''; position:absolute; bottom:0; right:0;
     width:60px; height:60px;
@@ -723,29 +773,53 @@
   /* Mobile: ≤768px */
   @media (max-width:768px) {
     nav { padding:12px 20px; }
-    .nav-links { display:none; }
 
-    /* Hero: fully responsive, no clipping */
-    #hero {
-      min-height:100svh;
-      padding-bottom:72px;
-      justify-content:flex-end;
+    /* Show hamburger, hide desktop links */
+    .hamburger { display:flex; }
+    .nav-overlay { display:block; }
+
+    /* Slide-in drawer */
+    .nav-links {
+      display:flex !important;
+      flex-direction:column; gap:0;
+      position:fixed; top:0; right:0; bottom:0;
+      width:min(280px, 80vw);
+      background:var(--iron-plate);
+      border-left:1px solid rgba(201,150,12,.2);
+      padding:80px 0 40px;
+      z-index:500;
+      transform:translateX(100%);
+      transition:transform .35s cubic-bezier(.4,0,.2,1);
+      overflow-y:auto;
+      list-style:none;
     }
-    /* parallax banner: already handled by background-position:75%/80% in CSS */
-    .hero-inner {
-      gap:10px;
-      padding:0 16px;
+    .nav-links.open { transform:translateX(0); }
+    .nav-links li { border-bottom:1px solid rgba(201,150,12,.08); }
+    .nav-links a {
+      display:block; padding:18px 32px;
+      font-size:.95rem; letter-spacing:.22em;
+      color:var(--ash-dim);
+      transition:color .2s, background .2s, padding-left .2s;
     }
+    .nav-links a:hover {
+      color:var(--forge-bright);
+      background:rgba(201,150,12,.06);
+      padding-left:40px;
+    }
+    .nav-links a::after { display:none; }
+
+    /* Sticky WA: icon only on mobile */
+    .sticky-wa span { display:none; }
+    .sticky-wa { padding:14px; border-radius:50%; bottom:20px; right:16px; }
+    .sticky-wa::before { border-radius:50%; }
+
+    /* Hero */
+    #hero { min-height:100svh; padding-bottom:72px; justify-content:flex-end; }
+    .hero-inner { gap:10px; padding:0 16px; }
     .hero-kicker { font-size:.68rem; letter-spacing:.3em; }
     .hero-logo-img { width:min(280px, 85vw); }
-    .hero-sub {
-      font-size:.85rem; letter-spacing:.2em;
-      max-width:90%; word-break:keep-all;
-    }
-    .hero-desc {
-      font-size:.9rem; line-height:1.75;
-      max-width:100%; padding:0 4px;
-    }
+    .hero-sub { font-size:.85rem; letter-spacing:.2em; max-width:90%; word-break:keep-all; }
+    .hero-desc { font-size:.9rem; line-height:1.75; max-width:100%; padding:0 4px; }
     .btn-forge { padding:13px 32px; font-size:.92rem; letter-spacing:.22em; }
 
     .solusi-wrap { grid-template-columns:1fr; gap:40px; }
@@ -782,21 +856,30 @@
 <!-- NAVBAR -->
 <nav>
   <img src="logomadoeraga.png" alt="Madoeraga" class="nav-logo">
-  <ul class="nav-links">
-    <li><a href="#masalah">Masalah</a></li>
-    <li><a href="#story">Tentang</a></li>
-    <li><a href="#bahan">Bahan</a></li>
-    <li><a href="#order">Pesan</a></li>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#masalah" onclick="closeMenu()">Masalah</a></li>
+    <li><a href="#story"   onclick="closeMenu()">Tentang</a></li>
+    <li><a href="#bahan"   onclick="closeMenu()">Bahan</a></li>
+    <li><a href="#order"   onclick="closeMenu()">Pesan</a></li>
   </ul>
+  <button class="hamburger" id="hamburger" aria-label="Buka menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="nav-overlay" id="navOverlay"></div>
+
+<!-- STICKY WA BUTTON -->
+<a href="https://wa.me/6208993071991?text=Halo%2C%20saya%20ingin%20memesan%20Madoeraga.%20Mohon%20informasinya."
+   class="sticky-wa" id="stickyWa" target="_blank" aria-label="Pesan via WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <span>Pesan Sekarang</span>
+</a>
 
 <!-- HERO -->
 <section id="hero">
   <div class="hero-banner">
     <picture>
-      <!-- Mobile portrait: gunakan MG2.png yang sudah portrait -->
       <source media="(max-width: 768px)" srcset="MG2.png">
-      <!-- Desktop / tablet landscape: banner wide -->
       <img src="madoeragabanner.png" alt="" aria-hidden="true">
     </picture>
   </div>
@@ -986,16 +1069,12 @@ Tradisi dan kualitas modern dalam setiap tetesnya.
   <p class="s-body reveal">Tiga langkah sederhana. Satu komitmen. Hasil yang terasa nyata.</p>
 
   <div class="steps">
-
-    <!-- STEP 1 -->
     <div class="step reveal">
       <span class="step-ghost-num">01</span>
       <div class="step-icon">
-        <!-- Spoon / scoop icon -->
         <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
           <ellipse cx="20" cy="10" rx="9" ry="6" stroke="#C9960C" stroke-width="1.5"/>
           <line x1="20" y1="16" x2="20" y2="34" stroke="#C9960C" stroke-width="1.5" stroke-linecap="round"/>
-          <!-- honey drip -->
           <path d="M16 10 Q15 14 16 17" stroke="#FFBA00" stroke-width="1" stroke-linecap="round" opacity=".6"/>
         </svg>
       </div>
@@ -1005,19 +1084,15 @@ Tradisi dan kualitas modern dalam setiap tetesnya.
       <div class="step-rule"></div>
     </div>
 
-    <!-- STEP 2 -->
     <div class="step reveal">
       <span class="step-ghost-num">02</span>
       <div class="step-icon">
-        <!-- Cup / glass icon -->
         <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M10 12 L13 34 H27 L30 12 Z" stroke="#C9960C" stroke-width="1.5" stroke-linejoin="round"/>
           <line x1="10" y1="12" x2="30" y2="12" stroke="#C9960C" stroke-width="1.5"/>
-          <!-- steam lines -->
           <path d="M16 7 Q17 4 16 2" stroke="#FFBA00" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
           <path d="M20 8 Q21 5 20 3" stroke="#FFBA00" stroke-width="1.2" stroke-linecap="round" opacity=".7"/>
           <path d="M24 7 Q25 4 24 2" stroke="#FFBA00" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
-          <!-- liquid fill hint -->
           <path d="M13.5 20 L26.5 20" stroke="rgba(201,150,12,.35)" stroke-width="1"/>
         </svg>
       </div>
@@ -1027,18 +1102,14 @@ Tradisi dan kualitas modern dalam setiap tetesnya.
       <div class="step-rule"></div>
     </div>
 
-    <!-- STEP 3 -->
     <div class="step reveal">
       <span class="step-ghost-num">03</span>
       <div class="step-icon">
-        <!-- Lightning / energy icon -->
         <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Calendar/cycle hint -->
           <rect x="7" y="10" width="26" height="22" rx="2" stroke="#C9960C" stroke-width="1.5"/>
           <line x1="7" y1="16" x2="33" y2="16" stroke="#C9960C" stroke-width="1.5"/>
           <line x1="13" y1="7" x2="13" y2="13" stroke="#C9960C" stroke-width="1.5" stroke-linecap="round"/>
           <line x1="27" y1="7" x2="27" y2="13" stroke="#C9960C" stroke-width="1.5" stroke-linecap="round"/>
-          <!-- checkmarks -->
           <path d="M13 23 L16 26 L21 21" stroke="#FFBA00" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M24 25 L27 25" stroke="rgba(201,150,12,.4)" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
@@ -1048,10 +1119,8 @@ Tradisi dan kualitas modern dalam setiap tetesnya.
       <p>Konsumsi rutin setiap pagi sebelum beraktivitas. Perubahan mulai terasa di minggu ke-2.</p>
       <div class="step-rule"></div>
     </div>
-
   </div>
 
-  <!-- Timing strip -->
   <div class="steps-timing reveal">
     <div class="timing-cell">
       <div class="t-label">Waktu Terbaik</div>
@@ -1066,7 +1135,6 @@ Tradisi dan kualitas modern dalam setiap tetesnya.
       <div class="t-val">Minggu 2 – 4</div>
     </div>
   </div>
-
 </section>
 
 <div class="divider"><span>✦</span></div>
@@ -1144,7 +1212,45 @@ Tradisi dan kualitas modern dalam setiap tetesnya.
   );
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-  /* ── JS Parallax: banner moves at 40% scroll speed = image stays "behind" ── */
+  /* ── Hamburger Menu ── */
+  const hamburger  = document.getElementById('hamburger');
+  const navLinks   = document.getElementById('navLinks');
+  const navOverlay = document.getElementById('navOverlay');
+
+  function openMenu() {
+    hamburger.classList.add('open');
+    navLinks.classList.add('open');
+    navOverlay.classList.add('open');
+    hamburger.setAttribute('aria-expanded','true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    hamburger.classList.remove('open');
+    navLinks.classList.remove('open');
+    navOverlay.classList.remove('open');
+    hamburger.setAttribute('aria-expanded','false');
+    document.body.style.overflow = '';
+  }
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.contains('open') ? closeMenu() : openMenu();
+  });
+  navOverlay.addEventListener('click', closeMenu);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+
+  /* ── Sticky WA ── */
+  const stickyWa = document.getElementById('stickyWa');
+  function syncStickyWa() {
+    const heroH = document.getElementById('hero').offsetHeight;
+    if ((window.scrollY || window.pageYOffset) > heroH * 0.6) {
+      stickyWa.classList.add('visible');
+    } else {
+      stickyWa.classList.remove('visible');
+    }
+  }
+  window.addEventListener('scroll', syncStickyWa, { passive:true });
+  syncStickyWa();
+
+  /* ── JS Parallax ── */
   (function() {
     const banner = document.querySelector('.hero-banner');
     const hero   = document.getElementById('hero');
@@ -1153,7 +1259,6 @@ Tradisi dan kualitas modern dalam setiap tetesnya.
       const scrollY = window.scrollY || window.pageYOffset;
       const heroH   = hero.offsetHeight;
       if (scrollY <= heroH) {
-        // Move banner up at 40% of scroll speed (slower = deeper parallax feel)
         banner.style.transform = 'translateY(' + (scrollY * 0.4) + 'px)';
       }
       ticking = false;
