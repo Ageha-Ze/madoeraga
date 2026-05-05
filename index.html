@@ -20,58 +20,13 @@
 <meta name="twitter:card"        content="summary_large_image">
 <meta name="twitter:title"       content="MADOERAGA — Madu Yang Diperkuat Dengan 4 Pilar">
 <meta name="twitter:description" content="Madu herbal premium dengan 8 bahan pilihan Nusantara. Khusus pria aktif. Hanya Rp50.000/botol.">
-<meta name="twitter:image"       content="https://madoeraga.vercel.app/mg8a.png">
+<meta name="twitter:image"       content="https://madoeraga.vercel.app/mga.png">
 
 <!-- ── SEO & WhatsApp fallback ── -->
 <meta name="description"         content="Madu herbal premium dengan 8 bahan pilihan Nusantara. Khusus pria aktif. Halal & P-IRT terdaftar. Hanya Rp50.000/botol.">
 <meta name="theme-color"         content="#C9960C">
-<meta name="google-site-verification" content="pxgwPjQ0rxxxIk8ilGN9-cy4y_ZXgxp0tmz92h8uJ0E" />
 <link rel="icon" type="image/png" href="logomadoeraga.png">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org/",
-  "@type": "Product",
-  "name": "MADOERAGA",
-  "description": "Madu herbal premium dengan 8 bahan pilihan Nusantara. Diformulasikan khusus untuk pria aktif. Halal Indonesia & P-IRT terdaftar.",
-  "image": [
-    "https://madoeraga.vercel.app/mg8a.png",
-    "https://madoeraga.vercel.app/MG2.png"
-  ],
-  "sku": "MDR-180-001",
-  "mpn": "P-IRT2073402011968-29",
-  "brand": {
-    "@type": "Brand",
-    "name": "Madu Sabrina"
-  },
-  "manufacturer": {
-    "@type": "Organization",
-    "name": "Madu Sabrina",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Yogyakarta",
-      "addressCountry": "ID"
-    }
-  },
-  "category": "Suplemen Herbal",
-  "keywords": "madu herbal, vitalitas pria, pasak bumi, ashwagandha, herbal Indonesia",
-  "offers": {
-    "@type": "Offer",
-    "url": "https://madoeraga.vercel.app/",
-    "priceCurrency": "IDR",
-    "price": "50000",
-    "priceValidUntil": "2026-12-31",
-    "availability": "https://schema.org/InStock",
-    "itemCondition": "https://schema.org/NewCondition",
-    "seller": {
-      "@type": "Organization",
-      "name": "Madu Sabrina",
-      "url": "https://madoeraga.vercel.app/"
-    }
-  }
-}
-</script>
 <style>
   :root {
     --ember:        #E8520A;
@@ -862,6 +817,133 @@
     .bahan-grid { grid-template-columns:1fr; }
     .order-card { padding:28px 18px; }
   }
+
+  /* ─── HIGHLIGHT CAROUSEL — FULLSCREEN HERO STYLE ─── */
+  #highlight {
+    position:relative;
+    height:100svh; min-height:600px;
+    overflow:hidden;
+    background:var(--iron);
+  }
+
+  /* Fullscreen track — slides stack behind content */
+  .carousel-viewport {
+    position:absolute; inset:0;
+    overflow:hidden;
+  }
+  .carousel-track {
+    display:flex; height:100%;
+    transition:transform .65s cubic-bezier(.4,0,.2,1);
+    will-change:transform;
+  }
+  .carousel-slide {
+    flex:0 0 100%; height:100%;
+    position:relative; overflow:hidden;
+  }
+  .carousel-slide img {
+    width:100%; height:100%;
+    object-fit:contain;        /* show full square image — no cropping */
+    object-position:center center;
+    display:block;
+    background:var(--iron);    /* iron-black fills the side/top letterbox */
+    transition:none;
+  }
+
+  /* Subtle bottom gradient so dots are readable over image */
+  .carousel-slide::after {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(to top, rgba(12,10,7,.6) 0%, transparent 30%);
+    pointer-events:none;
+  }
+
+  /* Content overlay sitting above all slides */
+  .carousel-overlay {
+    position:absolute; inset:0; z-index:10;
+    display:flex; flex-direction:column;
+    justify-content:flex-end; align-items:center;
+    padding:0 24px 64px;
+    text-align:center;
+    pointer-events:none;
+  }
+
+  /* Slide label — small kicker above title */
+  .carousel-kicker {
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:.7rem; letter-spacing:.5em; text-transform:uppercase;
+    color:var(--ember-hot);
+    margin-bottom:10px; display:block;
+    opacity:0; transform:translateY(14px);
+    transition:opacity .5s .1s, transform .5s .1s;
+  }
+  .carousel-slide.active ~ .carousel-overlay .carousel-kicker,
+  #highlight.ready .carousel-kicker { opacity:1; transform:translateY(0); }
+
+  /* Dots — inside overlay, above image */
+  .carousel-dots {
+    display:flex; justify-content:center; gap:8px;
+    margin-bottom:28px; pointer-events:auto;
+  }
+  .carousel-dot {
+    width:24px; height:3px;
+    background:rgba(255,255,255,.25);
+    border:none; cursor:pointer; padding:0;
+    transition:background .3s, width .3s;
+  }
+  .carousel-dot.active { background:var(--forge-bright); width:40px; }
+
+  /* Slide title */
+  .carousel-title {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(1.6rem,4vw,2.8rem); letter-spacing:.08em;
+    color:var(--ash); line-height:1.1; margin-bottom:6px;
+  }
+  .carousel-title span { color:var(--forge-bright); }
+
+  /* Slide subtitle */
+  .carousel-subtitle {
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:clamp(.8rem,1.8vw,1rem); letter-spacing:.2em; text-transform:uppercase;
+    color:var(--ash-dim); margin-bottom:28px;
+  }
+
+  /* Side arrows — floating over image */
+  .carousel-btn {
+    position:absolute; top:50%; z-index:20;
+    transform:translateY(-50%);
+    width:48px; height:48px;
+    background:rgba(12,10,7,.55); border:1px solid rgba(201,150,12,.3);
+    color:var(--forge-bright); font-size:1.3rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:background .25s, border-color .25s;
+    backdrop-filter:blur(4px);
+    pointer-events:auto;
+  }
+  .carousel-btn:hover { background:rgba(201,150,12,.2); border-color:var(--forge); }
+  #carouselPrev { left:20px; clip-path:polygon(8px 0%,100% 0%,100% 100%,0% 100%); }
+  #carouselNext { right:20px; clip-path:polygon(0% 0%,100% 0%,calc(100% - 8px) 100%,0% 100%); }
+
+  /* Counter — top right */
+  .carousel-counter {
+    position:absolute; top:24px; right:24px; z-index:20;
+    font-family:'Bebas Neue',sans-serif;
+    font-size:1rem; letter-spacing:.15em;
+    color:rgba(255,255,255,.35);
+  }
+  .carousel-counter span { color:var(--forge-bright); }
+
+  /* Progress bar — top */
+  .carousel-progress {
+    position:absolute; top:0; left:0; z-index:20;
+    height:3px; background:var(--forge);
+    transition:width .65s cubic-bezier(.4,0,.2,1);
+  }
+
+  @media (max-width:768px) {
+    #highlight { height:100svh; }
+    #carouselPrev { left:10px; }
+    #carouselNext { right:10px; }
+    .carousel-btn { width:40px; height:40px; font-size:1rem; }
+  }
 </style>
 </head>
 <body>
@@ -1157,6 +1239,56 @@ Tradisi dan kualitas modern dalam setiap tetesnya.
   </div>
 </section>
 
+
+<div class="divider"><span>✦</span></div>
+
+<!-- HIGHLIGHT CAROUSEL — FULLSCREEN HERO STYLE -->
+<section id="highlight">
+
+  <!-- Fullscreen sliding images -->
+  <div class="carousel-viewport">
+    <div class="carousel-track" id="carouselTrack">
+      <div class="carousel-slide active">
+        <img src="1hook.png" alt="Madoeraga — Madu Herbal Premium">
+      </div>
+      <div class="carousel-slide">
+        <img src="2value.png" alt="4 Pilar Madoeraga">
+      </div>
+      <div class="carousel-slide">
+        <img src="3proof.png" alt="Produksi dengan Standar Terjaga">
+      </div>
+      <div class="carousel-slide">
+        <img src="4trust.png" alt="8 Herbal Pilihan">
+      </div>
+      <div class="carousel-slide">
+        <img src="5close.png" alt="4 Pilar untuk Pria Aktif">
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress bar top -->
+  <div class="carousel-progress" id="carouselProgress"></div>
+
+  <!-- Counter top-right -->
+  <p class="carousel-counter"><span id="carouselCurrent">1</span> / 5</p>
+
+  <!-- Side arrows -->
+  <button class="carousel-btn" id="carouselPrev" aria-label="Sebelumnya">&#8592;</button>
+  <button class="carousel-btn" id="carouselNext" aria-label="Berikutnya">&#8594;</button>
+
+  <!-- Bottom overlay: dots -->
+  <div class="carousel-overlay">
+    <div class="carousel-dots" id="carouselDots">
+      <button class="carousel-dot active" data-idx="0" aria-label="Slide 1"></button>
+      <button class="carousel-dot" data-idx="1" aria-label="Slide 2"></button>
+      <button class="carousel-dot" data-idx="2" aria-label="Slide 3"></button>
+      <button class="carousel-dot" data-idx="3" aria-label="Slide 4"></button>
+      <button class="carousel-dot" data-idx="4" aria-label="Slide 5"></button>
+    </div>
+  </div>
+
+</section>
+
 <div class="divider"><span>✦</span></div>
 
 <!-- ORDER -->
@@ -1288,6 +1420,70 @@ Tradisi dan kualitas modern dalam setiap tetesnya.
     }, { passive:true });
     updateParallax();
   })();
+
+  /* ── Highlight Carousel — Fullscreen ── */
+  (function() {
+    const track    = document.getElementById('carouselTrack');
+    if (!track) return;
+    const slides   = Array.from(track.querySelectorAll('.carousel-slide'));
+    const dots     = Array.from(document.querySelectorAll('.carousel-dot'));
+    const btnPrev  = document.getElementById('carouselPrev');
+    const btnNext  = document.getElementById('carouselNext');
+    const counter  = document.getElementById('carouselCurrent');
+    const progress = document.getElementById('carouselProgress');
+    const vp       = document.querySelector('#highlight .carousel-viewport');
+    const section  = document.getElementById('highlight');
+    const TOTAL    = slides.length;
+    const AUTO_MS  = 4500;
+    let   current  = 0;
+    let   autoTimer;
+
+    function goTo(idx) {
+      slides[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      current = (idx + TOTAL) % TOTAL;
+      slides[current].classList.add('active');
+      dots[current].classList.add('active');
+      track.style.transform = 'translateX(-' + (current * 100) + '%)';
+      counter.textContent = current + 1;
+      // Progress bar width
+      progress.style.width = ((current + 1) / TOTAL * 100) + '%';
+    }
+
+    btnPrev.addEventListener('click', () => { goTo(current - 1); resetAuto(); });
+    btnNext.addEventListener('click', () => { goTo(current + 1); resetAuto(); });
+    dots.forEach(d => d.addEventListener('click', () => { goTo(+d.dataset.idx); resetAuto(); }));
+
+    // Touch / swipe
+    let touchStartX = 0;
+    vp.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive:true });
+    vp.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 40) { dx < 0 ? goTo(current + 1) : goTo(current - 1); resetAuto(); }
+    }, { passive:true });
+
+    // Keyboard (when section is in view)
+    document.addEventListener('keydown', e => {
+      const r = section.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) {
+        if (e.key === 'ArrowLeft')  { goTo(current - 1); resetAuto(); }
+        if (e.key === 'ArrowRight') { goTo(current + 1); resetAuto(); }
+      }
+    });
+
+    // Pause on hover
+    section.addEventListener('mouseenter', () => clearInterval(autoTimer));
+    section.addEventListener('mouseleave', () => resetAuto());
+
+    function resetAuto() {
+      clearInterval(autoTimer);
+      autoTimer = setInterval(() => goTo(current + 1), AUTO_MS);
+    }
+
+    goTo(0);
+    resetAuto();
+  })();
+
 </script>
 </body>
 </html>
